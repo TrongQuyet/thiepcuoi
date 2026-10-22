@@ -158,8 +158,8 @@
 <main>
   <div class="monogram" aria-hidden="true">Q<span>A</span></div>
   <p class="greeting" id="greeting"></p>
-  <h1>Trọng Quyết &amp; Hoàng Anh</h1>
-  <p class="when">Tiệc cưới 15:30, thứ Sáu 27.11.2026</p>
+  <h1 id="couple">Trọng Quyết &amp; Hoàng Anh</h1>
+  <p class="when" id="when">Tiệc cưới 15:30, thứ Sáu 27.11.2026</p>
   <p class="lead">Chúng mình chụp ảnh cưới ở nhiều concept nên làm mỗi concept một tấm thiệp. Bạn chọn một tấm để mở nhé.</p>
 
   <ul class="prints">
@@ -185,11 +185,16 @@
 
   <p class="note">Thiệp nào cũng có đủ giờ, địa điểm, chỉ đường và chỗ để xác nhận tham dự.</p>
 </main>
+<script src="config.js"></script>
 <script>
-  // Giữ tên khách (?tenkhach=...) khi mở từng thiệp
+  // Giữ tên khách, bên mời, giờ (?tenkhach=...&ben=gai&gio=...) khi mở từng thiệp
   (function () {
     var query = location.search;
-    var guest = (new URLSearchParams(query).get('tenkhach') || '').trim();
+    var inv = window.weddingInvite();
+    var guest = inv.guest;
+    var d = inv.party.date.split('-');
+    document.getElementById('couple').textContent = inv.first + ' & ' + inv.second;
+    document.getElementById('when').textContent = 'Tiệc cưới ' + inv.party.time + ', ' + inv.party.weekday.toLowerCase() + ' ' + [d[2], d[1], d[0]].join('.');
     if (guest) document.getElementById('greeting').textContent = 'Thân gửi ' + guest + ',';
     if (query) {
       document.querySelectorAll('.print').forEach(function (a) {

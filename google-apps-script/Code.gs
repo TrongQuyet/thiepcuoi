@@ -16,7 +16,7 @@
  */
 
 const SHEET_NAME = 'Khách mời';
-const HEADERS = ['Thời gian', 'Loại', 'Thiệp', 'Tên khách', 'Lời chúc', 'Tham dự', 'Số người', 'Khách mời (theo link)'];
+const HEADERS = ['Thời gian', 'Loại', 'Bên', 'Thiệp', 'Tên khách', 'Lời chúc', 'Tham dự', 'Số người', 'Khách mời (theo link)'];
 const MAX_WISHES = 200;
 
 function doPost(e) {
@@ -27,6 +27,7 @@ function doPost(e) {
     getSheet_().appendRow([
       new Date(),
       p.type === 'wish' ? 'Lời chúc' : 'Xác nhận',
+      p.ben === 'gai' ? 'Nhà gái' : 'Nhà trai',
       clean_(p.card),
       clean_(p.name),
       clean_(p.message),
@@ -49,9 +50,9 @@ function doGet() {
     ? sheet.getRange(2, 1, sheet.getLastRow() - 1, HEADERS.length).getValues()
     : [];
   const wishes = rows
-    .filter(r => String(r[4]).trim())
+    .filter(r => String(r[5]).trim())
     .slice(-MAX_WISHES)
-    .map(r => ({ name: unclean_(r[3]) || 'Khách mời', message: unclean_(r[4]) }));
+    .map(r => ({ name: unclean_(r[4]) || 'Khách mời', message: unclean_(r[5]) }));
   return json_(wishes);
 }
 

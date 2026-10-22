@@ -31,6 +31,22 @@
     font: inherit; color: inherit; background: var(--card); resize: vertical;
   }
   textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .options { display: grid; gap: 12px; margin-bottom: 14px; }
+  fieldset { border: 0; margin: 0; padding: 0; }
+  legend, .field-label { font-size: 14px; color: var(--muted); margin-bottom: 6px; padding: 0; }
+  .segmented { display: inline-flex; border: 1px solid var(--accent); border-radius: 999px; overflow: hidden; }
+  .segmented label { position: relative; }
+  .segmented input { position: absolute; opacity: 0; pointer-events: none; }
+  .segmented span { display: block; padding: 8px 18px; font-size: 15px; color: var(--accent-dark); cursor: pointer; }
+  .segmented input:checked + span { background: var(--accent); color: #fff; font-weight: 600; }
+  .segmented input:focus-visible + span { outline: 2px solid var(--accent-dark); outline-offset: -3px; }
+  .time-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  input[type=time] {
+    padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px;
+    font: inherit; color: var(--text); background: var(--card);
+  }
+  input[type=time]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .time-hint { font-size: 13px; color: var(--muted); }
   .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px; }
   button {
     border: 0; border-radius: 999px; padding: 10px 18px;
@@ -68,11 +84,28 @@
   <h1>Tạo link thiệp mời</h1>
   <p class="hint">Mỗi dòng một khách mời, ví dụ: <em>Anh Nam &amp; Chị Lan</em>, <em>Gia đình Bác Hùng</em>. Tên sẽ hiện ở dòng "Trân trọng kính mời" và tự điền vào form xác nhận. Mỗi khách có link vào trang chọn thiệp và link vào thẳng từng thiệp.</p>
 
-  <textarea id="names" placeholder="Anh Nam &amp; Chị Lan&#10;Gia đình Bác Hùng&#10;Bạn Minh"></textarea>
+  <div class="options">
+    <fieldset>
+      <legend>Thiệp của</legend>
+      <div class="segmented">
+        <label><input type="radio" name="side" value="trai" checked><span>Nhà trai</span></label>
+        <label><input type="radio" name="side" value="gai"><span>Nhà gái</span></label>
+      </div>
+    </fieldset>
+    <div>
+      <label class="field-label" for="time">Giờ mời dự tiệc</label>
+      <div class="time-row">
+        <input type="time" id="time">
+        <button type="button" class="small secondary" id="clearTime" hidden>Dùng giờ trên thiệp</button>
+        <span class="time-hint" id="timeHint"></span>
+      </div>
+    </div>
+  </div>
+
+  <textarea id="names" placeholder="Điền tên người bạn muốn mời"></textarea>
 
   <div class="actions">
     <button id="make">Tạo link</button>
-    <button id="copyAll" class="secondary" hidden>Copy tất cả (dạng bảng)</button>
   </div>
 
   <div id="count" class="count"></div>
@@ -94,14 +127,47 @@
   var names = document.getElementById('names');
   var list = document.getElementById('list');
   var count = document.getElementById('count');
-  var copyAll = document.getElementById('copyAll');
+  var timeInput = document.getElementById('time');
+  var timeHint = document.getElementById('timeHint');
+  var DEFAULT_TIME = { trai: '15:30', gai: '09:00' };   // giờ tiệc in trên thiệp, xem config.js
   var toast = document.getElementById('toast');
   var rows = [];
 
   try { names.value = localStorage.getItem('guest-names') || ''; } catch (e) {}
 
+  function side() { return document.querySelector('input[name=side]:checked').value; }
+
+  // Nhớ bên + giờ đã chọn lần trước
+  try {
+    var saved = JSON.parse(localStorage.getItem('guest-options') || '{}');
+    if (saved.side === 'gai') document.querySelector('input[name=side][value=gai]').checked = true;
+    if (saved.time) timeInput.value = saved.time;
+  } catch (e) {}
+
+  var clearTime = document.getElementById('clearTime');
+  clearTime.onclick = function () { timeInput.value = ''; onOptionsChange(); };
+
+  function updateHint() {
+    clearTime.hidden = !timeInput.value;
+    timeHint.textContent = timeInput.value
+      ? 'Thiệp sẽ hiện giờ ' + timeInput.value
+      : 'Để trống thì dùng giờ trên thiệp (' + DEFAULT_TIME[side()] + ')';
+  }
+
+  function onOptionsChange() {
+    try { localStorage.setItem('guest-options', JSON.stringify({ side: side(), time: timeInput.value })); } catch (e) {}
+    updateHint();
+    if (rows.length) render();
+  }
+  document.querySelectorAll('input[name=side]').forEach(function (r) { r.onchange = onOptionsChange; });
+  timeInput.oninput = onOptionsChange;
+  updateHint();
+
   function linkFor(name, path) {
-    return base + path + '?tenkhach=' + encodeURIComponent(name);
+    var q = '?tenkhach=' + encodeURIComponent(name);
+    if (side() === 'gai') q += '&ben=gai';
+    if (timeInput.value) q += '&gio=' + timeInput.value;
+    return base + path + q;
   }
 
   function showToast(text) {
@@ -182,20 +248,9 @@
       list.appendChild(li);
     });
     count.textContent = rows.length ? rows.length + ' khách mời' : '';
-    copyAll.hidden = !rows.length;
   }
 
   document.getElementById('make').onclick = render;
-
-  // Dạng bảng (cách nhau bằng Tab): dán thẳng vào Excel / Google Sheet
-  copyAll.onclick = function () {
-    var header = ['Tên khách'].concat(TARGETS.map(function (t) { return t.label; })).join('\t');
-    var lines = rows.map(function (r) {
-      return [r.name].concat(r.links.map(function (l) { return l.url; })).join('\t');
-    });
-    copy([header].concat(lines).join('\n'), 'Đã copy link của ' + rows.length + ' khách');
-  };
-
   if (names.value.trim()) render();
 </script>
 </body>
