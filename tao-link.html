@@ -41,11 +41,12 @@
   .segmented input:checked + span { background: var(--accent); color: #fff; font-weight: 600; }
   .segmented input:focus-visible + span { outline: 2px solid var(--accent-dark); outline-offset: -3px; }
   .time-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  input[type=time] {
+  input[type=time], select {
     padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px;
     font: inherit; color: var(--text); background: var(--card);
   }
-  input[type=time]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  select { width: 100%; }
+  input[type=time]:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
   .time-hint { font-size: 13px; color: var(--muted); }
   .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px; }
   button {
@@ -59,14 +60,9 @@
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   li.guest {
     background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-    padding: 12px 12px 4px;
+    padding: 10px 12px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center;
   }
-  .name { font-weight: 600; margin-bottom: 6px; }
-  .target {
-    display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: center;
-    padding: 8px 0; border-top: 1px solid var(--border);
-  }
-  .target-label { font-size: 14px; }
+  .name { font-weight: 600; }
   .link { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); word-break: break-all; }
   .row-actions { display: flex; gap: 6px; }
   .count { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
@@ -82,9 +78,13 @@
 <body>
 <main>
   <h1>Tạo link thiệp mời</h1>
-  <p class="hint">Mỗi dòng một khách mời, ví dụ: <em>Anh Nam &amp; Chị Lan</em>, <em>Gia đình Bác Hùng</em>. Tên sẽ hiện ở dòng "Trân trọng kính mời" và tự điền vào form xác nhận. Mỗi khách có link vào trang chọn thiệp và link vào thẳng từng thiệp.</p>
+  <p class="hint">Mỗi dòng một khách mời, ví dụ: <em>Anh Nam &amp; Chị Lan</em>, <em>Gia đình Bác Hùng</em>. Tên sẽ hiện ở dòng "Trân trọng kính mời" và tự điền vào form xác nhận.</p>
 
   <div class="options">
+    <div>
+      <label class="field-label" for="target">Link mở vào</label>
+      <select id="target"></select>
+    </div>
     <fieldset>
       <legend>Thiệp của</legend>
       <div class="segmented">
@@ -135,13 +135,25 @@
 
   try { names.value = localStorage.getItem('guest-names') || ''; } catch (e) {}
 
-  function side() { return document.querySelector('input[name=side]:checked').value; }
+  var target = document.getElementById('target');
+  TARGETS.forEach(function (t) {
+    var o = document.createElement('option');
+    o.value = t.path;
+    o.textContent = t.label;
+    target.appendChild(o);
+  });
 
-  // Nhớ bên + giờ đã chọn lần trước
+  function side() { return document.querySelector('input[name=side]:checked').value; }
+  function currentTarget() {
+    return TARGETS.filter(function (t) { return t.path === target.value; })[0] || TARGETS[0];
+  }
+
+  // Nhớ trang, bên, giờ đã chọn lần trước
   try {
     var saved = JSON.parse(localStorage.getItem('guest-options') || '{}');
     if (saved.side === 'gai') document.querySelector('input[name=side][value=gai]').checked = true;
     if (saved.time) timeInput.value = saved.time;
+    if (typeof saved.target === 'string' && TARGETS.some(function (t) { return t.path === saved.target; })) target.value = saved.target;
   } catch (e) {}
 
   var clearTime = document.getElementById('clearTime');
@@ -155,10 +167,11 @@
   }
 
   function onOptionsChange() {
-    try { localStorage.setItem('guest-options', JSON.stringify({ side: side(), time: timeInput.value })); } catch (e) {}
+    try { localStorage.setItem('guest-options', JSON.stringify({ side: side(), time: timeInput.value, target: target.value })); } catch (e) {}
     updateHint();
     if (rows.length) render();
   }
+  target.onchange = onOptionsChange;
   document.querySelectorAll('input[name=side]').forEach(function (r) { r.onchange = onOptionsChange; });
   timeInput.oninput = onOptionsChange;
   updateHint();
@@ -209,12 +222,7 @@
     rows = names.value.split('\n')
       .map(function (n) { return n.trim().replace(/\s+/g, ' '); })
       .filter(function (n) { if (!n || seen[n]) return false; seen[n] = true; return true; })
-      .map(function (n) {
-        return {
-          name: n,
-          links: TARGETS.map(function (t) { return { label: t.label, url: linkFor(n, t.path) }; })
-        };
-      });
+      .map(function (n) { return { name: n, url: linkFor(n, currentTarget().path) }; });
 
     try { localStorage.setItem('guest-names', names.value); } catch (e) {}
 
@@ -225,26 +233,16 @@
       var name = document.createElement('div');
       name.className = 'name';
       name.textContent = row.name;
-      li.appendChild(name);
-
-      row.links.forEach(function (l) {
-        var line = document.createElement('div');
-        line.className = 'target';
-        var label = document.createElement('div');
-        label.className = 'target-label';
-        label.textContent = l.label;
-        var actions = document.createElement('div');
-        actions.className = 'row-actions';
-        actions.append(
-          button('Copy', 'small', function () { copy(l.url, 'Đã copy link ' + l.label + ' cho ' + row.name); }),
-          button('Xem', 'small secondary', function () { window.open(l.url, '_blank'); })
-        );
-        var link = document.createElement('div');
-        link.className = 'link';
-        link.textContent = l.url;
-        line.append(label, actions, link);
-        li.appendChild(line);
-      });
+      var actions = document.createElement('div');
+      actions.className = 'row-actions';
+      actions.append(
+        button('Copy', 'small', function () { copy(row.url, 'Đã copy link cho ' + row.name); }),
+        button('Xem', 'small secondary', function () { window.open(row.url, '_blank'); })
+      );
+      var link = document.createElement('div');
+      link.className = 'link';
+      link.textContent = row.url;
+      li.append(name, actions, link);
       list.appendChild(li);
     });
     count.textContent = rows.length ? rows.length + ' khách mời' : '';
