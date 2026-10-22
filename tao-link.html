@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tạo link thiệp mời</title>
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --card: #ffffff;
+    --text: #3d352c;
+    --muted: #8a7f70;
+    --accent: #928362;
+    --accent-dark: #7a6c4f;
+    --border: #e4ddd1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 22px; margin: 0 0 4px; color: var(--accent-dark); }
+  p.hint { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+  textarea {
+    width: 100%; min-height: 160px; padding: 12px;
+    border: 1px solid var(--border); border-radius: 10px;
+    font: inherit; color: inherit; background: var(--card); resize: vertical;
+  }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px; }
+  button {
+    border: 0; border-radius: 999px; padding: 10px 18px;
+    background: var(--accent); color: #fff; font: inherit; font-weight: 600; cursor: pointer;
+  }
+  button:hover { background: var(--accent-dark); }
+  button.secondary { background: transparent; color: var(--accent-dark); border: 1px solid var(--accent); }
+  button.small { padding: 6px 12px; font-size: 14px; }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  li {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 12px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center;
+  }
+  .name { font-weight: 600; }
+  .link { grid-column: 1 / -1; font-size: 13px; color: var(--muted); word-break: break-all; }
+  .row-actions { display: flex; gap: 6px; }
+  .count { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    background: var(--text); color: #fff; padding: 8px 16px; border-radius: 999px;
+    font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Tạo link thiệp mời</h1>
+  <p class="hint">Mỗi dòng một khách mời, ví dụ: <em>Anh Nam &amp; Chị Lan</em>, <em>Gia đình Bác Hùng</em>. Tên sẽ hiện ở dòng "Trân trọng kính mời" và tự điền vào form xác nhận.</p>
+
+  <textarea id="names" placeholder="Anh Nam &amp; Chị Lan&#10;Gia đình Bác Hùng&#10;Bạn Minh"></textarea>
+
+  <div class="actions">
+    <button id="make">Tạo link</button>
+    <button id="copyAll" class="secondary" hidden>Copy tất cả</button>
+  </div>
+
+  <div id="count" class="count"></div>
+  <ul id="list"></ul>
+</main>
+<div id="toast" class="toast">Đã copy</div>
+
+<script>
+  // Link thiệp nằm cùng thư mục với trang này (chạy được cả trên máy lẫn GitHub Pages)
+  var base = new URL('./', location.href).href;
+  var names = document.getElementById('names');
+  var list = document.getElementById('list');
+  var count = document.getElementById('count');
+  var copyAll = document.getElementById('copyAll');
+  var toast = document.getElementById('toast');
+  var rows = [];
+
+  try { names.value = localStorage.getItem('guest-names') || ''; } catch (e) {}
+
+  function linkFor(name) {
+    return base + '?tenkhach=' + encodeURIComponent(name);
+  }
+
+  function showToast(text) {
+    toast.textContent = text;
+    toast.classList.add('show');
+    clearTimeout(showToast.t);
+    showToast.t = setTimeout(function () { toast.classList.remove('show'); }, 1400);
+  }
+
+  function copy(text, message) {
+    var done = function () { showToast(message || 'Đã copy'); };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+    } else {
+      fallbackCopy(text);
+      done();
+    }
+  }
+
+  function fallbackCopy(text) {
+    var t = document.createElement('textarea');
+    t.value = text;
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand('copy');
+    t.remove();
+  }
+
+  function render() {
+    var seen = {};
+    rows = names.value.split('\n')
+      .map(function (n) { return n.trim().replace(/\s+/g, ' '); })
+      .filter(function (n) { if (!n || seen[n]) return false; seen[n] = true; return true; })
+      .map(function (n) { return { name: n, url: linkFor(n) }; });
+
+    try { localStorage.setItem('guest-names', names.value); } catch (e) {}
+
+    list.innerHTML = '';
+    rows.forEach(function (row) {
+      var li = document.createElement('li');
+      var name = document.createElement('div');
+      name.className = 'name';
+      name.textContent = row.name;
+      var actions = document.createElement('div');
+      actions.className = 'row-actions';
+      var copyBtn = document.createElement('button');
+      copyBtn.className = 'small';
+      copyBtn.textContent = 'Copy link';
+      copyBtn.onclick = function () { copy(row.url, 'Đã copy link cho ' + row.name); };
+      var open = document.createElement('button');
+      open.className = 'small secondary';
+      open.textContent = 'Xem';
+      open.onclick = function () { window.open(row.url, '_blank'); };
+      actions.append(copyBtn, open);
+      var link = document.createElement('div');
+      link.className = 'link';
+      link.textContent = row.url;
+      li.append(name, actions, link);
+      list.appendChild(li);
+    });
+    count.textContent = rows.length ? rows.length + ' khách mời' : '';
+    copyAll.hidden = !rows.length;
+  }
+
+  document.getElementById('make').onclick = render;
+  copyAll.onclick = function () {
+    copy(rows.map(function (r) { return r.name + '\t' + r.url; }).join('\n'), 'Đã copy ' + rows.length + ' link');
+  };
+  if (names.value.trim()) render();
+</script>
+</body>
+</html>

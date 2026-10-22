@@ -59,6 +59,9 @@
 #LINE30{height:185px !important;}
 #GROUP182{top:345.37px !important;}
 #SECTION24{height:524.8px !important;}
+/* Ẩn chân trang LAMI WEDDING INVITATION + mạng xã hội */
+#GROUP174{display:none !important;}
+#SECTION12{height:360px !important;}
 </style>
 </head><body class=""><button class="music-btn playing" id="musicBtn" aria-label="Nhạc nền">
   <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -180,6 +183,49 @@
 
   document.addEventListener('click', onSubmit, true);
   document.addEventListener('submit', onSubmit, true);
+})();
+</script>
+<script>
+(function () {
+  // Ẩn huy hiệu "Powered by ladipage" (script LadiPage chèn vào body với class ngẫu nhiên)
+  function hideBadge(el) {
+    if (el.nodeType === 1 && el.parentNode === document.body && getComputedStyle(el).backgroundImage.indexOf('ladipage.svg') >= 0) {
+      el.style.setProperty('display', 'none', 'important');
+    }
+  }
+  new MutationObserver(function (list) {
+    list.forEach(function (m) { m.addedNodes.forEach(hideBadge); });
+  }).observe(document.body, { childList: true });
+  Array.prototype.forEach.call(document.body.children, hideBadge);
+
+  // Tên khách mời lấy từ link: ...?tenkhach=Anh%20Nam
+  var guest = (new URLSearchParams(location.search).get('tenkhach') || '').trim();
+  function fillGuest() {
+    var headline = document.querySelector('#HEADLINE256 .ladi-headline');
+    if (!headline) return;
+    var span = headline.querySelector('[data-replace-str]');
+    if (!span) { span = document.createElement('span'); headline.appendChild(span); }
+    if (!span.textContent.trim()) span.textContent = guest || 'Quý khách';
+    // Tên dài: thu nhỏ chữ cho vừa một dòng (tắt transition để đo được ngay)
+    headline.style.transition = 'none';
+    headline.style.whiteSpace = 'nowrap';
+    headline.style.fontSize = '';
+    var box = document.getElementById('HEADLINE256').clientWidth;
+    var width = span.getBoundingClientRect().width;
+    if (width > box) {
+      var size = parseFloat(getComputedStyle(headline).fontSize);
+      headline.style.fontSize = Math.max(18, Math.floor(size * box / width * 0.97)) + 'px';
+    }
+    var nameInput = document.querySelector('#FORM4 [name=name]');
+    if (guest && nameInput && !nameInput.value) nameInput.value = guest;
+  }
+  window.addEventListener('load', function () {
+    fillGuest();
+    setTimeout(fillGuest, 1500);
+    setTimeout(fillGuest, 4000);
+    // Phông chữ viết tay tải xong thì chữ rộng hơn, đo lại
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fillGuest);
+  });
 })();
 </script>
 </body></html>
