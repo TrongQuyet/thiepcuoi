@@ -5,6 +5,12 @@ window.WEDDING_CONFIG = {
   apiUrl: '',
 };
 
+// Danh sách thiệp (đường dẫn tính từ thư mục gốc). Thêm thiệp mới: thêm một dòng vào đây.
+window.WEDDING_CARDS = [
+  { path: 'thiep-1/', name: 'Kem & tulip', desc: 'Tông kem, tulip vẽ tay', cover: 'covers/thiep-1.jpg' },
+  { path: 'thiep-2/', name: 'Báo cưới', desc: 'Báo vintage đỏ đô', cover: 'covers/thiep-2.jpg' },
+];
+
 // Thông tin theo thiệp in của từng bên. Link có ?ben=gai thì dùng thông tin nhà gái, mặc định nhà trai.
 window.WEDDING_SIDES = {
   trai: {
