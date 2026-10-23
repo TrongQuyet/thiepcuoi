@@ -9,7 +9,7 @@ window.WEDDING_CONFIG = {
 window.WEDDING_CARDS = [
   { path: 'thiep-1/', name: 'Kem & tulip', desc: 'Tông kem, tulip vẽ tay', cover: 'covers/thiep-1.jpg' },
   { path: 'thiep-2/', name: 'Báo cưới', desc: 'Báo vintage đỏ đô', cover: 'covers/thiep-2.jpg' },
-  { path: 'thiep-3/', name: 'Unity', desc: 'Nâu be, vườn thông', cover: 'covers/thiep-3.jpg' },
+  { path: 'thiep-3/', name: 'Hoàng kim', desc: 'Xanh lục, hoa vàng kim', cover: 'covers/thiep-3.jpg' },
   { path: 'thiep-4/', name: 'Liên hoa', desc: 'Sen hồng, áo dài', cover: 'covers/thiep-4.jpg' },
 ];
 
