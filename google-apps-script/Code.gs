@@ -52,7 +52,11 @@ function doGet() {
   const wishes = rows
     .filter(r => String(r[5]).trim())
     .slice(-MAX_WISHES)
-    .map(r => ({ name: unclean_(r[4]) || 'Khách mời', message: unclean_(r[5]) }));
+    .map(r => ({
+      name: unclean_(r[4]) || 'Khách mời',
+      message: unclean_(r[5]),
+      time: r[0] instanceof Date ? Utilities.formatDate(r[0], 'Asia/Ho_Chi_Minh', 'HH:mm dd/MM/yyyy') : '',
+    }));
   return json_(wishes);
 }
 

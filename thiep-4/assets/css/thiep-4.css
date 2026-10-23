@@ -1,0 +1,81 @@
+/* Thiệp 4: phần tự viết thêm (form xác nhận tham dự) theo màu của mẫu Liên Hoa xanh */
+.t4-sheet {
+  padding: 0 !important;
+  max-width: 440px;
+  background-color: rgb(255, 251, 237) !important;
+  color: rgb(18, 77, 0);
+  font-family: "Times New Roman", serif;
+}
+.t4-sheet-head {
+  position: relative;
+  padding: 22px 48px 16px;
+  text-align: center;
+  background-color: rgb(94, 129, 60);
+}
+.t4-sheet-head h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: rgba(0, 0, 0, 0.2) 1px 1px 2px;
+}
+.t4-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+.t4-close:hover { background: rgba(255, 255, 255, 0.2); }
+.t4-form, .t4-done { padding: 18px 20px 22px; display: grid; gap: 14px; }
+.t4-field { display: grid; gap: 6px; border: 0; margin: 0; padding: 0; min-width: 0; }
+.t4-field > span, .t4-field > legend { font-size: 14px; color: rgb(94, 129, 60); padding: 0; margin-bottom: 2px; }
+.t4-field input[type=text], .t4-field select, .t4-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgb(94, 129, 60);
+  border-radius: 6px;
+  background: transparent;
+  color: rgb(18, 77, 0);
+  font: 16px/1.4 Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+}
+.t4-field textarea { resize: none; }
+.t4-field input:focus, .t4-field select:focus, .t4-field textarea:focus { outline: 2px solid rgba(94, 129, 60, 0.35); outline-offset: 1px; }
+.t4-choice { display: flex; align-items: center; gap: 8px; font-size: 15px; cursor: pointer; }
+.t4-choice input { accent-color: rgb(94, 129, 60); width: 18px; height: 18px; }
+.t4-submit {
+  justify-self: center;
+  padding: 10px 28px;
+  border: 0;
+  border-radius: 7px;
+  background-color: rgb(94, 129, 60);
+  color: rgb(254, 251, 244);
+  font: 14px "Times New Roman", serif;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.t4-submit:disabled { opacity: 0.6; cursor: wait; }
+.t4-error { margin: 0; color: #a3322b; font-size: 14px; text-align: center; }
+.t4-done { text-align: center; }
+.t4-done p { margin: 0; }
+.t4-done-title { font-size: 22px; font-family: Carattere, cursive; color: rgb(94, 129, 60); }
+/* Nút nhạc khi tạm dừng: dừng hiệu ứng quay và nhảy */
+#music-btn.t4-paused .lhv2g-music-spin,
+#music-btn.t4-paused [class*="lhv2g-music-dance"] { animation-play-state: paused !important; }
+#wish-list:empty::before {
+  content: "Hãy là người đầu tiên gửi lời chúc 💌";
+  display: block;
+  padding: 16px 0;
+  text-align: center;
+  font-style: italic;
+  opacity: 0.7;
+}
