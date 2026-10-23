@@ -76,6 +76,8 @@
       intro.classList.add('t3-leaving');
       main.classList.add('t3-open');
       document.body.classList.remove('t3-locked');
+      // CSS của mẫu khoá cuộn trang khi thiệp còn "đóng": html:has(.invitation-container[data-cover=closed])
+      $$('.invitation-container').forEach(function (el) { el.setAttribute('data-cover', 'open'); });
       setTimeout(function () { intro.style.display = 'none'; setupReveal(); }, 1400);
     }
     $('#intro-open').addEventListener('click', open);
