@@ -1,5 +1,5 @@
 // Nút "Đổi thiệp": chuyển sang thiệp khác, giữ nguyên tên khách / bên mời / giờ trên link.
-// Dùng: <script src="../switcher.js" data-card="thiep-1/" data-accent="#928362" data-position="left"></script>
+// Dùng: <script src="../switcher.js" data-card="thiep-1/" data-accent="#928362" data-position="left" data-bottom="18"></script>
 // Cần config.js (WEDDING_CARDS) được nạp trước.
 (function () {
   var script = document.currentScript;
@@ -10,10 +10,11 @@
   var current = script.getAttribute('data-card') || '';
   var accent = script.getAttribute('data-accent') || '#6e100f';
   var side = script.getAttribute('data-position') === 'right' ? 'right' : 'left';
+  var bottom = parseInt(script.getAttribute('data-bottom'), 10) || 18;   // tránh đè nút có sẵn của thiệp
   var query = location.search;
 
   var css = '' +
-    '.tc-switch{position:fixed;bottom:18px;' + side + ':16px;z-index:2147483000;display:flex;align-items:center;gap:7px;' +
+    '.tc-switch{position:fixed;bottom:' + bottom + 'px;' + side + ':16px;z-index:2147483000;display:flex;align-items:center;gap:7px;' +
       'padding:10px 15px 10px 12px;border:0;border-radius:999px;background:' + accent + ';color:#fff;cursor:pointer;' +
       'font:600 14px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;box-shadow:0 6px 18px -6px rgba(0,0,0,.45);}' +
     '.tc-switch svg{width:18px;height:18px;flex:none}' +

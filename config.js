@@ -9,6 +9,7 @@ window.WEDDING_CONFIG = {
 window.WEDDING_CARDS = [
   { path: 'thiep-1/', name: 'Kem & tulip', desc: 'Tông kem, tulip vẽ tay', cover: 'covers/thiep-1.jpg' },
   { path: 'thiep-2/', name: 'Báo cưới', desc: 'Báo vintage đỏ đô', cover: 'covers/thiep-2.jpg' },
+  { path: 'thiep-3/', name: 'Unity', desc: 'Nâu be, vườn thông', cover: 'covers/thiep-3.jpg' },
 ];
 
 // Thông tin theo thiệp in của từng bên. Link có ?ben=gai thì dùng thông tin nhà gái, mặc định nhà trai.
@@ -25,7 +26,11 @@ window.WEDDING_SIDES = {
       maps: 'https://www.google.com/maps/search/C%C3%B4ng+vi%C3%AAn+%C4%90%C6%B0%E1%BB%9Dng+M%C6%B0%C6%A1ng+%C4%90an+Ho%C3%A0i+%C3%94+Di%C3%AAn+H%C3%A0+N%E1%BB%99i',
       mapsQuery: 'Công viên Đường Mương Đan Hoài Ô Diên Hà Nội',
     },
-    ceremony: { name: 'Lễ thành hôn', time: '14:45', weekday: 'Thứ Bảy', date: '2026-11-28', place: 'tư gia nhà trai' },
+    ceremony: {
+      name: 'Lễ thành hôn', time: '14:45', weekday: 'Thứ Bảy', date: '2026-11-28', place: 'tư gia nhà trai',
+      address: 'Số 106, Đường Thôn Trung 2, Xã Ô Diên, TP Hà Nội',
+      maps: 'https://www.google.com/maps/search/S%E1%BB%91+106+%C4%90%C6%B0%E1%BB%9Dng+Th%C3%B4n+Trung+2+%C3%94+Di%C3%AAn+H%C3%A0+N%E1%BB%99i',
+    },
   },
   gai: {
     first: 'Hoàng Anh', second: 'Trọng Quyết',
@@ -39,7 +44,11 @@ window.WEDDING_SIDES = {
       maps: 'https://www.google.com/maps/search/H%E1%BB%93+Qu%C3%BD+Th%C3%B4n+%C4%90o%C3%A0i+%C3%94+Di%C3%AAn+H%C3%A0+N%E1%BB%99i',
       mapsQuery: 'Hồ Quý Thôn Đoài Ô Diên Hà Nội',
     },
-    ceremony: { name: 'Lễ vu quy', time: '12:00', weekday: 'Thứ Bảy', date: '2026-11-28', place: 'tư gia nhà gái' },
+    ceremony: {
+      name: 'Lễ vu quy', time: '12:00', weekday: 'Thứ Bảy', date: '2026-11-28', place: 'tư gia nhà gái',
+      address: 'Số 03, Xóm Đoàn Kết, Cụm 3, Xã Ô Diên, TP Hà Nội',
+      maps: 'https://www.google.com/maps/search/X%C3%B3m+%C4%90o%C3%A0n+K%E1%BA%BFt+C%E1%BB%A5m+3+%C3%94+Di%C3%AAn+H%C3%A0+N%E1%BB%99i',
+    },
   },
 };
 

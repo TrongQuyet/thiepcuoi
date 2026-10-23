@@ -22,6 +22,7 @@
     --print: #fbfaf7;
     --bronze: #928362;
     --burgundy: #6e100f;
+    --umber: #a47e62;
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
@@ -84,6 +85,8 @@
     align-items: start;
   }
   .prints li:only-child { grid-column: 1 / -1; max-width: 260px; margin: 0 auto; }
+  /* số thiệp lẻ: tấm cuối nằm giữa hàng */
+  .prints li:last-child:nth-child(odd):not(:only-child) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 9px); }
   .print {
     display: block;
     padding: 9px 9px 0;
@@ -178,6 +181,15 @@
         <span class="caption">
           <strong>Báo cưới</strong>
           <small>Báo vintage đỏ đô</small>
+        </span>
+      </a>
+    </li>
+    <li>
+      <a class="print" href="thiep-3/" style="--accent: var(--umber)">
+        <img src="covers/thiep-3.jpg" alt="Ảnh cưới vườn thông của Trọng Quyết và Hoàng Anh" width="600" height="900">
+        <span class="caption">
+          <strong>Unity</strong>
+          <small>Nâu be, vườn thông</small>
         </span>
       </a>
     </li>
