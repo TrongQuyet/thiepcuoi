@@ -79,3 +79,34 @@
   font-style: italic;
   opacity: 0.7;
 }
+
+/* Tên khách mời: khung riêng nổi bật giữa phần thông tin lễ cưới */
+#guest-line {
+  position: relative;
+  margin: 6px auto 4px;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  padding: 14px 16px 12px;
+  text-align: center;
+  color: rgb(18, 77, 0);
+  font-family: "Times New Roman", serif;
+  background: rgba(255, 251, 237, .92);
+  border: 1.5px solid rgb(94, 129, 60);
+  border-radius: 14px;
+  box-shadow: 0 0 0 4px rgba(255, 251, 237, .92), 0 0 0 5px rgba(94, 129, 60, .45), 0 8px 22px rgba(94, 129, 60, .18);
+}
+.t4-guest-label {
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgb(94, 129, 60);
+}
+.t4-guest-name {
+  margin-top: 2px;
+  font-family: Carattere, cursive;
+  font-size: 40px;
+  line-height: 1.15;
+  color: rgb(18, 77, 0);
+  -webkit-text-stroke: .6px rgb(18, 77, 0);
+  overflow-wrap: anywhere;
+}

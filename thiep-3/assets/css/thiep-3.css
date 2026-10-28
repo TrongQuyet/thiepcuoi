@@ -104,3 +104,12 @@ body.t3-locked { overflow: hidden; }
 
 /* Họ tên đầy đủ: một dòng */
 [data-w="full1"], [data-w="full2"] { font-size: clamp(26px, 8.4vw, 36px) !important; white-space: nowrap; }
+
+/* Tên khách mời: màu vàng kim, to hơn để nổi bật trên nền xanh */
+[data-w="guest"] {
+  color: #E9C77F !important;
+  font-weight: 600;
+  text-shadow: 0 0 18px rgba(199, 154, 78, .35);
+}
+#intro [data-w="guest"] { font-size: 28px !important; line-height: 1.25; }
+main [data-w="guest"] { font-size: 38px !important; }

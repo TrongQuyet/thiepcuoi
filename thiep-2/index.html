@@ -69,6 +69,10 @@
 #HEADLINE76 > .ladi-headline{font-family: Trirong, serif; font-size: 14px; line-height: 1.6; color: rgb(244, 234, 220); text-align: center;}
 #HEADLINE49 > .ladi-headline{font-family: Trirong, serif; font-size: 14px; line-height: 1.6; color: rgb(110, 16, 15); text-align: center;}
 #SECTION9{height:760px !important;}
+/* Tên khách mời: to hơn, nền đỏ đô nổi bật, một dòng (tên dài tự thu nhỏ) */
+#HEADLINE103{top:116px !important;}
+#HEADLINE103 > .ladi-headline{font-size:24px !important;line-height:1.35 !important;text-decoration:none !important;white-space:nowrap;}
+#HEADLINE103 .guest-pill{display:inline-block;padding:0 14px;background:rgb(110,16,15);color:rgb(244,234,220);border-radius:4px;box-shadow:0 2px 6px rgba(110,16,15,.3);}
 /* Tên dưới ảnh tròn: một dòng, không đè lên tên bố mẹ */
 #HEADLINE17,#HEADLINE18{width:190px !important;left:-20px !important;}
 #HEADLINE17 > .ladi-headline,#HEADLINE18 > .ladi-headline{font-size:22px !important;white-space:nowrap;}
@@ -617,9 +621,18 @@ function showFireworks() {
 
   // Tên khách mời lấy từ link (?tenkhach=...)
   function fillGuest() {
-    if (!guest) return;
     var h = document.querySelector('#HEADLINE103 .ladi-headline');
-    if (h) h.textContent = guest;
+    if (h) {
+      var pill = h.querySelector('.guest-pill');
+      if (!pill) { pill = document.createElement('span'); pill.className = 'guest-pill'; h.textContent = ''; h.appendChild(pill); }
+      pill.textContent = guest || 'Quý khách';
+      // Tên dài: thu nhỏ chữ cho vừa một dòng
+      h.style.fontSize = '';
+      var box = document.getElementById('HEADLINE103').clientWidth - 8;
+      var width = pill.getBoundingClientRect().width;
+      if (width > box) h.style.setProperty('font-size', Math.max(14, Math.floor(24 * box / width)) + 'px', 'important');
+    }
+    if (!guest) return;
     ['#FORM4 [name=name]', '#wish-form #name'].forEach(function (sel) {
       var input = document.querySelector(sel);
       if (input && !input.value) input.value = guest;
@@ -744,7 +757,10 @@ function showFireworks() {
     if (btn) btn.addEventListener('click', sendWish);
     loadWishes().then(startToasts);
   });
-  window.addEventListener('load', function () { setTimeout(fillGuest, 1000); });
+  window.addEventListener('load', function () {
+    setTimeout(fillGuest, 1000);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fillGuest);
+  });
 })();
 </script>
 <script src="../switcher.js" data-card="thiep-2/" data-accent="#6E100F" data-position="right"></script>

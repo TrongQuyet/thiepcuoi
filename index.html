@@ -53,10 +53,31 @@
   }
   .monogram span { display: inline-block; transform: translateY(0.12em); margin-left: -0.08em; }
   .greeting {
-    margin: 0 0 6px;
-    font: italic 400 22px/1.3 "Cormorant Garamond", serif;
+    margin: 16px auto 18px;
+    max-width: 30em;
+  }
+  .greeting-label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
     color: var(--ink-soft);
-    min-height: 1.3em;
+  }
+  .greeting-name {
+    display: block;
+    margin-top: 2px;
+    font: italic 500 36px/1.15 "Cormorant Garamond", serif;
+    color: var(--burgundy);
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+  .greeting-name::after {
+    content: "";
+    display: block;
+    width: 64px;
+    height: 1px;
+    margin: 10px auto 0;
+    background: linear-gradient(to right, transparent, var(--bronze), transparent);
   }
   h1 {
     margin: 0;
@@ -162,7 +183,7 @@
 <body>
 <main>
   <div class="monogram" aria-hidden="true">Q<span>A</span></div>
-  <p class="greeting" id="greeting"></p>
+  <p class="greeting"><span class="greeting-label">Trân trọng kính mời</span><span class="greeting-name" id="guestName">Quý khách</span></p>
   <h1 id="couple">Trọng Quyết &amp; Hoàng Anh</h1>
   <p class="when" id="when">Tiệc cưới 15:30, thứ Sáu 27.11.2026</p>
   <p class="lead">Chúng mình chụp ảnh cưới ở nhiều concept nên làm mỗi concept một tấm thiệp. Bạn chọn một tấm để mở nhé.</p>
@@ -218,7 +239,7 @@
     var d = inv.party.date.split('-');
     document.getElementById('couple').textContent = inv.first + ' & ' + inv.second;
     document.getElementById('when').textContent = 'Tiệc cưới ' + inv.party.time + ', ' + inv.party.weekday.toLowerCase() + ' ' + [d[2], d[1], d[0]].join('.');
-    if (guest) document.getElementById('greeting').textContent = 'Thân gửi ' + guest + ',';
+    if (guest) document.getElementById('guestName').textContent = guest;
     if (query) {
       document.querySelectorAll('.print').forEach(function (a) {
         a.setAttribute('href', a.getAttribute('href') + query);

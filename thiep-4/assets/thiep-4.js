@@ -51,11 +51,7 @@
     $$('[data-w="maps-embed"]').forEach(function (f) {
       f.src = 'https://www.google.com/maps?q=' + encodeURIComponent(p.mapsQuery) + '&output=embed';
     });
-    if (inv.guest) {
-      set('guest', inv.guest);
-      var line = $('#guest-line');
-      if (line) line.classList.remove('hidden');
-    }
+    set('guest', inv.guest || 'Quý khách');
     // Thêm vào lịch Google
     var start = p.date.replace(/-/g, '') + 'T' + p.time.replace(':', '') + '00';
     var endH = +p.time.split(':')[0] + 3;
