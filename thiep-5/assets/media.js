@@ -1,5 +1,5 @@
 // Tạo bởi build: danh sách ảnh album và phim mở đầu
-window.T5_FILM = 'v1;/seq/opening/;144;600x1200;24';
+window.T5_FILM = 'v1;/seq/opening/;72;480x960;12';
 window.T5_ALBUM = [
   { id: 'album-01', src: '/anh/album-01-1600.webp', ratio: 0.6667 }, // LIU_7173
   { id: 'album-02', src: '/anh/album-02-1600.webp', ratio: 0.6667 }, // LIU_7430
