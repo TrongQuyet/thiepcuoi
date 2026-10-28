@@ -178,11 +178,13 @@
   timeInput.oninput = onOptionsChange;
   updateHint();
 
+  // name rỗng: link chung không ghi tên khách
   function linkFor(name, path) {
-    var q = '?tenkhach=' + encodeURIComponent(name);
-    if (side() === 'gai') q += '&ben=gai';
-    if (timeInput.value) q += '&gio=' + timeInput.value;
-    return base + path + q;
+    var q = [];
+    if (name) q.push('tenkhach=' + encodeURIComponent(name));
+    if (side() === 'gai') q.push('ben=gai');
+    if (timeInput.value) q.push('gio=' + timeInput.value);
+    return base + path + (q.length ? '?' + q.join('&') : '');
   }
 
   function showToast(text) {
@@ -225,6 +227,8 @@
       .map(function (n) { return n.trim().replace(/\s+/g, ' '); })
       .filter(function (n) { if (!n || seen[n]) return false; seen[n] = true; return true; })
       .map(function (n) { return { name: n, url: linkFor(n, currentTarget().path) }; });
+    var generic = !rows.length;
+    if (generic) rows = [{ name: '', url: linkFor('', currentTarget().path) }];
 
     try { localStorage.setItem('guest-names', names.value); } catch (e) {}
 
@@ -234,11 +238,11 @@
       li.className = 'guest';
       var name = document.createElement('div');
       name.className = 'name';
-      name.textContent = row.name;
+      name.textContent = row.name || 'Link chung (không ghi tên khách)';
       var actions = document.createElement('div');
       actions.className = 'row-actions';
       actions.append(
-        button('Copy', 'small', function () { copy(row.url, 'Đã copy link cho ' + row.name); }),
+        button('Copy', 'small', function () { copy(row.url, row.name ? 'Đã copy link cho ' + row.name : 'Đã copy link chung'); }),
         button('Xem', 'small secondary', function () { window.open(row.url, '_blank'); })
       );
       var link = document.createElement('div');
@@ -247,11 +251,11 @@
       li.append(name, actions, link);
       list.appendChild(li);
     });
-    count.textContent = rows.length ? rows.length + ' khách mời' : '';
+    count.textContent = generic ? '' : rows.length + ' khách mời';
   }
 
   document.getElementById('make').onclick = render;
-  if (names.value.trim()) render();
+  render();
 </script>
 </body>
 </html>
