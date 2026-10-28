@@ -11,6 +11,7 @@ window.WEDDING_CARDS = [
   { path: 'thiep-2/', name: 'Báo cưới', desc: 'Báo vintage đỏ đô', cover: 'covers/thiep-2.jpg' },
   { path: 'thiep-3/', name: 'Hoàng kim', desc: 'Xanh lục, hoa vàng kim', cover: 'covers/thiep-3.jpg' },
   { path: 'thiep-4/', name: 'Liên hoa', desc: 'Sen hồng, áo dài', cover: 'covers/thiep-4.jpg' },
+  { path: 'thiep-5/', name: 'Thước phim', desc: 'Phim mở đầu, đủ cả 4 bộ ảnh', cover: 'covers/thiep-5.jpg' },
 ];
 
 // Thông tin theo thiệp in của từng bên. Link có ?ben=gai thì dùng thông tin nhà gái, mặc định nhà trai.
