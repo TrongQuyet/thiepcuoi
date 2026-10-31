@@ -113,3 +113,10 @@ body.t3-locked { overflow: hidden; }
 }
 #intro [data-w="guest"] { font-size: 28px !important; line-height: 1.25; }
 main [data-w="guest"] { font-size: 38px !important; }
+
+/* Album: ô cuối đứng lẻ thì canh giữa (gap-2.5 = 10px) */
+#album-grid > div:last-child:nth-child(even) {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: calc(50% - 5px);
+}

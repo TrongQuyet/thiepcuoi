@@ -11,7 +11,7 @@ window.T7_ALBUM = [
   { id: 'album-09', src: '/anh/album-09-1600.webp', ratio: 1.5 }, // LIU_9440
   { id: 'album-10', src: '/anh/album-10-1600.webp', ratio: 0.6667 }, // LIU_7173
   { id: 'album-11', src: '/anh/album-11-1600.webp', ratio: 1.5 }, // LIU_7656
-  { id: 'album-12', src: '/anh/album-12-1600.webp', ratio: 0.6667 }, // LIU_7999
+  { id: 'album-12', src: '/anh/album-12-1600.webp', ratio: 0.6667 }, // LIU_8045
   { id: 'album-13', src: '/anh/album-13-1600.webp', ratio: 0.6667 }, // LIU_8273
-  { id: 'album-14', src: '/anh/album-14-1600.webp', ratio: 0.6667 }, // LIU_8431
+  { id: 'album-14', src: '/anh/album-14-1600.webp', ratio: 0.6667 }, // LIU_8482
 ];
