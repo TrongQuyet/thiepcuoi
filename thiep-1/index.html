@@ -207,7 +207,6 @@
 (function () {
   // Gửi form xác nhận tham dự về Google Sheet (Apps Script web app) thay cho LadiPage
   var RSVP_URL = (window.WEDDING_CONFIG && window.WEDDING_CONFIG.apiUrl) || '';
-  var sending = false;
 
   function field(form, name) {
     var el = form.elements.namedItem(name);
@@ -223,7 +222,6 @@
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
-    if (sending) return;
 
     var nameInput = form.elements.namedItem('name');
     if (!field(form, 'name')) {
@@ -246,16 +244,12 @@
       card: 'thiep-1',
       ben: window.weddingInvite().side
     });
-    sending = true;
-    fetch(RSVP_URL, { method: 'POST', mode: 'no-cors', body: data })
-      .then(function () {
-        if (window.WishTicker) window.WishTicker.push({ name: data.get('name'), message: data.get('message') });
-        if (window.RsvpPrompt) window.RsvpPrompt.done();
-        form.reset();
-        try { window.ladi('POPUP1').show(); } catch (err) { alert('Cảm ơn quý khách đã phản hồi!'); }
-      })
-      .catch(function () { alert('Gửi chưa thành công, quý khách vui lòng thử lại.'); })
-      .then(function () { sending = false; });
+    // Cảm ơn ngay, gửi lên Sheet chạy ngầm; lỗi thì bỏ qua
+    fetch(RSVP_URL, { method: 'POST', mode: 'no-cors', keepalive: true, body: data }).catch(function () {});
+    if (window.WishTicker) window.WishTicker.push({ name: data.get('name'), message: data.get('message') });
+    if (window.RsvpPrompt) window.RsvpPrompt.done();
+    form.reset();
+    try { window.ladi('POPUP1').show(); } catch (err) { alert('Cảm ơn quý khách đã phản hồi!'); }
   }
 
   document.addEventListener('click', onSubmit, true);

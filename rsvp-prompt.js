@@ -127,33 +127,20 @@
       submit(name);
     });
 
-    function busyUi(on) {
-      sending = on;
-      [yes, no, send].forEach(function (b) { b.disabled = on; });
-      send.textContent = on ? 'Đang gửi…' : 'Gửi xác nhận';
-    }
-
+    // Cảm ơn ngay, gửi lên Sheet chạy ngầm (keepalive: đóng trang vẫn gửi), lỗi thì bỏ qua
     function submit(name) {
-      busyUi(true);
-      err.hidden = true;
+      sending = true;
       fetch(API, {
-        method: 'POST', mode: 'no-cors',
+        method: 'POST', mode: 'no-cors', keepalive: true,
         body: new URLSearchParams({ type: 'rsvp', name: name, attend: ATTEND[choice], guests: '', message: '', invitee: inv.guest, card: card, ben: inv.side }),
-      }).then(function () {
-        done();
-        ask.hidden = true; actions.hidden = true; form.hidden = true;
-        thanks.innerHTML = '';
-        thanks.append(el('div', 'rp-icon', choice === 'yes' ? '💐' : '💌'), el('h2', 'rp-title', 'Cảm ơn ' + name + '!'),
-          el('p', '', choice === 'yes' ? 'Hẹn gặp quý khách trong ngày vui của chúng tôi.' : 'Cảm ơn quý khách đã báo cho chúng tôi. Mong sớm gặp lại!'));
-        thanks.hidden = false;
-        if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
-        setTimeout(function () { if (dialog.open) dialog.close(); }, 3200);
-      }).catch(function () {
-        err.hidden = false;
-        err.textContent = 'Gửi chưa thành công, quý khách vui lòng thử lại.';
-        if (!inv.guest) form.hidden = false;
-        else form.parentNode.insertBefore(err, thanks);
-      }).then(function () { busyUi(false); });
+      }).catch(function () {});
+      done();
+      ask.hidden = true; actions.hidden = true; form.hidden = true;
+      thanks.append(el('div', 'rp-icon', choice === 'yes' ? '💐' : '💌'), el('h2', 'rp-title', 'Cảm ơn ' + name + '!'),
+        el('p', '', choice === 'yes' ? 'Hẹn gặp quý khách trong ngày vui của chúng tôi.' : 'Cảm ơn quý khách đã báo cho chúng tôi. Mong sớm gặp lại!'));
+      thanks.hidden = false;
+      if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+      setTimeout(function () { if (dialog.open) dialog.close(); }, 3200);
     }
 
     dialog.append(close, ask, actions, form, thanks);

@@ -127,7 +127,7 @@
   function send(data) {
     data.card = CARD;
     if (!data.ben) data.ben = inv.side;
-    return fetch(API, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(data) });
+    return fetch(API, { method: 'POST', mode: 'no-cors', keepalive: true, body: new URLSearchParams(data) });
   }
 
   // ---------- Xác nhận tham dự ----------
@@ -164,20 +164,18 @@
       err.textContent = fail;
       if (fail) return;
       var w = form.querySelector('[name=whose]:checked');
-      submit.disabled = true;
+      // Cảm ơn ngay, gửi lên Sheet chạy ngầm; lỗi thì bỏ qua
+      var message = form.elements.message.value.trim();
       send({
         type: 'rsvp', name: name, attend: attend.value,
         guests: attend.value === 'Vắng mặt' ? '' : form.elements.guests.value,
-        message: form.elements.message.value.trim(), invitee: inv.guest, ben: w ? w.value : inv.side,
-      }).then(function () {
-        form.reset();
-        form.hidden = true;
-        $('#rsvp-done').hidden = false;
-        if (window.RsvpPrompt) window.RsvpPrompt.done();
-      }).catch(function () {
-        err.hidden = false;
-        err.textContent = 'Gửi chưa thành công, bạn vui lòng thử lại.';
-      }).then(function () { submit.disabled = false; });
+        message: message, invitee: inv.guest, ben: w ? w.value : inv.side,
+      }).catch(function () {});
+      if (message && window.WishTicker) window.WishTicker.push({ name: name, message: message });
+      form.reset();
+      form.hidden = true;
+      $('#rsvp-done').hidden = false;
+      if (window.RsvpPrompt) window.RsvpPrompt.done();
     });
   }
 
