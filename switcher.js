@@ -3,11 +3,12 @@
 // Cần config.js (WEDDING_CARDS) được nạp trước.
 (function () {
   var script = document.currentScript;
-  var cards = window.WEDDING_CARDS || [];
+  var current = script && script.getAttribute('data-card') || '';
+  // Thiệp đang tạm ẩn không hiện trong danh sách (trừ chính thiệp đang xem)
+  var cards = (window.WEDDING_CARDS || []).filter(function (c) { return !c.hidden || c.path === current; });
   if (!script || cards.length < 2) return;
 
   var root = new URL('.', script.src).href;          // thư mục chứa switcher.js = thư mục gốc
-  var current = script.getAttribute('data-card') || '';
   var accent = script.getAttribute('data-accent') || '#6e100f';
   var side = script.getAttribute('data-position') === 'right' ? 'right' : 'left';
   var bottom = parseInt(script.getAttribute('data-bottom'), 10) || 18;   // tránh đè nút có sẵn của thiệp

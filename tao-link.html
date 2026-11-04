@@ -113,21 +113,17 @@
 </main>
 <div id="toast" class="toast">Đã copy</div>
 
+<script src="config.js"></script>
 <script>
   // Link thiệp nằm cùng thư mục với trang này (chạy được cả trên máy lẫn GitHub Pages)
   var base = new URL('./', location.href).href;
 
-  // Thêm thiệp mới: thêm một dòng vào đây
-  var TARGETS = [
-    { path: '', label: 'Trang chọn thiệp' },
-    { path: 'thiep-1/', label: 'Thiệp 1 · Kem & tulip' },
-    { path: 'thiep-2/', label: 'Thiệp 2 · Báo cưới' },
-    { path: 'thiep-3/', label: 'Thiệp 3 · Hoàng kim' },
-    { path: 'thiep-4/', label: 'Thiệp 4 · Liên hoa' },
-    { path: 'thiep-5/', label: 'Thiệp 5 · Thước phim' },
-    { path: 'thiep-6/', label: 'Thiệp 6 · Chuyến bay' },
-    { path: 'thiep-7/', label: 'Thiệp 7 · Phố lên đèn' }
-  ];
+  // Danh sách thiệp lấy từ config.js (bỏ thiệp đang tạm ẩn)
+  var TARGETS = [{ path: '', label: 'Trang chọn thiệp' }].concat(
+    (window.WEDDING_CARDS || []).filter(function (c) { return !c.hidden; }).map(function (c) {
+      return { path: c.path, label: 'Thiệp ' + c.path.replace(/\D/g, '') + ' · ' + c.name };
+    })
+  );
 
   var names = document.getElementById('names');
   var list = document.getElementById('list');

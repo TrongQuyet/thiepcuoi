@@ -8,7 +8,7 @@ window.T5_ALBUM = [
   { id: 'album-05', src: '/anh/album-05-1600.webp', ratio: 0.6667 }, // LIU_7729
   { id: 'album-06', src: '/anh/album-06-1600.webp', ratio: 0.6667 }, // LIU_7795
   { id: 'album-07', src: '/anh/album-07-1600.webp', ratio: 0.6667 }, // LIU_7979
-  { id: 'album-08', src: '/anh/album-08-1600.webp', ratio: 0.6667 }, // LIU_8045
+  { id: 'album-08', src: '/anh/album-08-1600.webp', ratio: 0.6667 }, // LIU_8054
   { id: 'album-09', src: '/anh/album-09-1600.webp', ratio: 0.6667 }, // LIU_8042
   { id: 'album-10', src: '/anh/album-10-1600.webp', ratio: 0.6667 }, // LIU_8126
   { id: 'album-11', src: '/anh/album-11-1600.webp', ratio: 0.6667 }, // LIU_8181

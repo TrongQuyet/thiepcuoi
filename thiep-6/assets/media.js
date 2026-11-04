@@ -5,7 +5,7 @@ window.T6_ALBUM = [
   { id: 'album-03', src: '/anh/album-03-1600.webp', ratio: 0.6667 }, // LIU_8008
   { id: 'album-04', src: '/anh/album-04-1600.webp', ratio: 0.6667 }, // LIU_8269
   { id: 'album-05', src: '/anh/album-05-1600.webp', ratio: 0.6667 }, // LIU_8791
-  { id: 'album-06', src: '/anh/album-06-1600.webp', ratio: 0.6667 }, // LIU_7979
+  { id: 'album-06', src: '/anh/album-06-1600.webp', ratio: 0.6667 }, // LIU_7762
   { id: 'album-07', src: '/anh/album-07-1600.webp', ratio: 0.6667 }, // LIU_8102
   { id: 'album-08', src: '/anh/album-08-1600.webp', ratio: 1.5 }, // LIU_9440
   { id: 'album-09', src: '/anh/album-09-1600.webp', ratio: 0.6667 }, // LIU_7391
@@ -24,5 +24,5 @@ window.T6_ALBUM = [
   { id: 'album-22', src: '/anh/album-22-1600.webp', ratio: 0.6667 }, // LIU_8943
   { id: 'album-23', src: '/anh/album-23-1600.webp', ratio: 0.6667 }, // LIU_9051
   { id: 'album-24', src: '/anh/album-24-1600.webp', ratio: 0.6667 }, // LIU_9077
-  { id: 'album-25', src: '/anh/album-25-1600.webp', ratio: 0.6667 }, // LIU_8045
+  { id: 'album-25', src: '/anh/album-25-1600.webp', ratio: 0.6667 }, // LIU_8054
 ];

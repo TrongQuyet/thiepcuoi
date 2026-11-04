@@ -6,14 +6,16 @@ window.WEDDING_CONFIG = {
 };
 
 // Danh sách thiệp (đường dẫn tính từ thư mục gốc). Thêm thiệp mới: thêm một dòng vào đây.
+// hidden: true = tạm ẩn khỏi trang chọn thiệp, nút Đổi thiệp và trang tạo link (link trực tiếp vẫn mở được).
 window.WEDDING_CARDS = [
   { path: 'thiep-1/', name: 'Kem & tulip', desc: 'Tông kem, tulip vẽ tay', cover: 'covers/thiep-1.webp' },
-  { path: 'thiep-2/', name: 'Báo cưới', desc: 'Báo vintage đỏ đô', cover: 'covers/thiep-2.webp' },
+  { path: 'thiep-2/', name: 'Báo cưới', desc: 'Báo vintage đỏ đô', cover: 'covers/thiep-2.webp', hidden: true },
   { path: 'thiep-3/', name: 'Hoàng kim', desc: 'Xanh lục, hoa vàng kim', cover: 'covers/thiep-3.webp' },
   { path: 'thiep-4/', name: 'Liên hoa', desc: 'Sen hồng, áo dài', cover: 'covers/thiep-4.webp' },
-  { path: 'thiep-5/', name: 'Thước phim', desc: 'Phim mở đầu, đủ cả 4 bộ ảnh', cover: 'covers/thiep-5.webp' },
-  { path: 'thiep-6/', name: 'Chuyến bay', desc: 'Bay qua mây, vé lên máy bay', cover: 'covers/thiep-6.webp' },
-  { path: 'thiep-7/', name: 'Phố lên đèn', desc: 'Phố cổ đèn lồng, thả hoa đăng', cover: 'covers/thiep-7.webp' },
+  { path: 'thiep-5/', name: 'Thước phim', desc: 'Phim mở đầu, đủ cả 4 bộ ảnh', cover: 'covers/thiep-5.webp', hidden: true },
+  { path: 'thiep-6/', name: 'Chuyến bay', desc: 'Bay qua mây, vé lên máy bay', cover: 'covers/thiep-6.webp', hidden: true },
+  { path: 'thiep-7/', name: 'Phố lên đèn', desc: 'Phố cổ đèn lồng, thả hoa đăng', cover: 'covers/thiep-7.webp', hidden: true },
+  { path: 'thiep-8/', name: 'Song hỷ', desc: 'Đỏ song hỷ, ảnh studio', cover: 'covers/thiep-8.webp' },
 ];
 
 // Thông tin theo thiệp in của từng bên. Link có ?ben=gai thì dùng thông tin nhà gái, mặc định nhà trai.
