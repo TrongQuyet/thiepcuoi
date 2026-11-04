@@ -114,3 +114,7 @@ h3[data-w="full1"], h3[data-w="full2"] { font-size: clamp(38px, 11.5vw, 56px) !i
 
 /* Lịch trình: chữ lời mô tả không chạm viền khung (bản gốc sát mép phải) */
 span:has(> [data-w="t1-label"]), span:has(> [data-w="t2-label"]) { padding-right: 18px; }
+
+/* Hộp quà: tiêu đề chữ trắng trên nền vàng nhạt khó đọc (bản gốc), đổi sang đỏ */
+#gift-dialog h2 { color: rgb(153, 0, 0) !important; text-shadow: none !important; }
+#gift-dialog .btn-circle { color: rgb(153, 0, 0) !important; }

@@ -5,6 +5,12 @@ window.WEDDING_CONFIG = {
   apiUrl: 'https://script.google.com/macros/s/AKfycbxoDlqoRym75jWCf_jD5zZhfLhcMJB47_gm4PoVwZMg-7Sn_YQ6ZC3BhNu7r7zYdJhYEw/exec',
 };
 
+// Hộp mừng cưới (gift.js). qr: ảnh mã QR, đường dẫn tính từ thư mục gốc. Chưa có account thì hiện "đang cập nhật".
+window.WEDDING_GIFTS = {
+  trai: { who: 'Chú rể', name: 'Nguyễn Trọng Quyết', bank: 'Techcombank', account: '8330 0520 01', holder: 'NGUYEN TRONG QUYET', qr: 'qr/chu-re.webp' },
+  gai: { who: 'Cô dâu', name: 'Hà Hoàng Anh', bank: '', account: '', holder: '', qr: '' },
+};
+
 // Danh sách thiệp (đường dẫn tính từ thư mục gốc). Thêm thiệp mới: thêm một dòng vào đây.
 // hidden: true = tạm ẩn khỏi trang chọn thiệp, nút Đổi thiệp và trang tạo link (link trực tiếp vẫn mở được).
 window.WEDDING_CARDS = [
