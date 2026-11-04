@@ -11,7 +11,9 @@
   var inv = window.weddingInvite ? window.weddingInvite() : { guest: '', side: 'trai', party: {} };
   var accent = attr('accent', '#8a6a3a'), bg = attr('bg', '#fffdf8'), ink = attr('ink', '#2b2621');
   var font = attr('font', '"Times New Roman", Times, serif');
-  var DELAY_MS = 5000, DONE_KEY = 'wedding-rsvp-sent', LATER_KEY = 'wedding-rsvp-later';
+  // Nhớ theo từng tên khách trong link: mỗi link ?tenkhach= hỏi riêng một lần (link chung là một khách)
+  var guestKey = ':' + inv.guest.toLowerCase().replace(/\s+/g, ' ');
+  var DELAY_MS = 5000, DONE_KEY = 'wedding-rsvp-sent' + guestKey, LATER_KEY = 'wedding-rsvp-later' + guestKey;
   var card = (location.pathname.match(/thiep-\d+/) || [''])[0];
   var ATTEND = { yes: 'Sẽ đến', no: 'Không đến được' };
   var dialog, choice = null, shown = false, timer = null, observer = null, sending = false;
