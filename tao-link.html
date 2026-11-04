@@ -253,7 +253,15 @@
     count.textContent = generic ? '' : rows.length + ' khách mời';
   }
 
-  document.getElementById('make').onclick = render;
+  // Bấm Tạo link: tạo rồi copy luôn (một link thì copy link đó, nhiều khách thì copy cả danh sách "Tên: link")
+  document.getElementById('make').onclick = function () {
+    render();
+    if (rows.length === 1) {
+      copy(rows[0].url, rows[0].name ? 'Đã tạo và copy link cho ' + rows[0].name : 'Đã tạo và copy link chung');
+    } else {
+      copy(rows.map(function (r) { return r.name + ': ' + r.url; }).join('\n'), 'Đã tạo và copy ' + rows.length + ' link');
+    }
+  };
   render();
 </script>
 </body>
