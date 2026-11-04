@@ -2,7 +2,7 @@
 window.WEDDING_CONFIG = {
   // URL web app của Google Apps Script (file google-apps-script/Code.gs), kết thúc bằng /exec.
   // Để trống thì form xác nhận và sổ lời chúc chưa gửi/nhận được dữ liệu.
-  apiUrl: '',
+  apiUrl: 'https://script.google.com/macros/s/AKfycbxoDlqoRym75jWCf_jD5zZhfLhcMJB47_gm4PoVwZMg-7Sn_YQ6ZC3BhNu7r7zYdJhYEw/exec',
 };
 
 // Danh sách thiệp (đường dẫn tính từ thư mục gốc). Thêm thiệp mới: thêm một dòng vào đây.
