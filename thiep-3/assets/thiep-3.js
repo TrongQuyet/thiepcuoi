@@ -67,20 +67,23 @@
     musicBtn.addEventListener('click', function () { if (playing) { audio.pause(); showMusic(false); } else startMusic(); });
   }
 
-  // ---------- Màn mở thiệp ----------
+  // ---------- Vào thẳng thiệp (bỏ màn "Mở thiệp") ----------
   function setupIntro() {
     var intro = $('#intro'), main = $('#main');
-    document.body.classList.add('t3-locked');
-    function open() {
-      startMusic();
-      intro.classList.add('t3-leaving');
-      main.classList.add('t3-open');
-      document.body.classList.remove('t3-locked');
-      // CSS của mẫu khoá cuộn trang khi thiệp còn "đóng": html:has(.invitation-container[data-cover=closed])
-      $$('.invitation-container').forEach(function (el) { el.setAttribute('data-cover', 'open'); });
-      setTimeout(function () { intro.style.display = 'none'; setupReveal(); }, 1400);
+    if (intro) intro.style.display = 'none';
+    main.classList.add('t3-open');
+    // CSS của mẫu khoá cuộn trang khi thiệp còn "đóng": html:has(.invitation-container[data-cover=closed])
+    $$('.invitation-container').forEach(function (el) { el.setAttribute('data-cover', 'open'); });
+    setupReveal();
+    // Nhạc: thử tự phát; trình duyệt chặn thì phát ở lần chạm / cuộn / bấm phím đầu tiên
+    var events = ['pointerdown', 'touchend', 'click', 'keydown', 'wheel', 'scroll'];
+    function onFirst(e) {
+      if (playing || (e && musicBtn.contains(e.target))) return;
+      startMusic().then(function () { if (playing) stop(); });
     }
-    $('#intro-open').addEventListener('click', open);
+    function stop() { events.forEach(function (t) { window.removeEventListener(t, onFirst, true); }); }
+    events.forEach(function (t) { window.addEventListener(t, onFirst, { capture: true, passive: true }); });
+    startMusic().then(function () { if (playing) stop(); });
   }
 
   // ---------- Hộp thoại ----------
@@ -220,6 +223,7 @@
       var item = wishItem({ name: name, message: message, time: 'đang gửi...' });
       list.insertBefore(item, list.firstChild);
       send({ type: 'wish', name: name, message: message, invitee: inv.guest }).then(function () {
+        if (window.WishTicker) window.WishTicker.push({ name: name, message: message });
         item.querySelectorAll('span')[1].textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ' ' + now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
         msgEl.value = '';
       }).catch(function () {

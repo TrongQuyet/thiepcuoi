@@ -120,3 +120,7 @@ main [data-w="guest"] { font-size: 38px !important; }
   justify-self: center;
   width: calc(50% - 5px);
 }
+
+/* Bỏ màn "Mở thiệp": vào thẳng nội dung */
+#intro { display: none !important; }
+#main { opacity: 1 !important; }
