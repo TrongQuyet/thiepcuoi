@@ -208,6 +208,7 @@
         form.reset();
         form.hidden = true;
         $('#rsvp-done').hidden = false;
+        if (window.RsvpPrompt) window.RsvpPrompt.done();
       }).catch(function () {
         err.hidden = false;
         err.textContent = 'Gửi chưa thành công, bạn vui lòng thử lại.';
