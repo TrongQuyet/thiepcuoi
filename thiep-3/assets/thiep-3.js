@@ -178,9 +178,6 @@
     setupIntro();
     setupAlbum();
     setupWishes();
-    var gift = $('#gift-dialog');
-    wireDialog(gift);
-    $('#gift-open').addEventListener('click', function () { openDialog(gift); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

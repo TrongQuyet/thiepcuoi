@@ -1,31 +1,51 @@
-// Hộp mừng cưới: điền mã QR, ngân hàng, số tài khoản từ WEDDING_GIFTS (config.js) vào thiệp.
-// Dùng (sau config.js): <script src="../gift.js"></script>
-// Đánh dấu trong HTML:
-//   [data-gift="trai" | "gai" | "auto"]  khối của một người nhận ("auto": theo bên mời ?ben=, bên đó chưa có thì lấy bên còn lại)
-//   [data-gift-who] [data-gift-name] [data-gift-bank] [data-gift-holder]  chữ
-//   [data-gift-account]        số tài khoản + nút "Sao chép"; ="tap" thì chạm vào chính dòng chữ để chép
-//   [data-gift-qr]             thay nội dung bằng ảnh QR; ="bg" thì đặt làm ảnh nền (khung LadiPage)
-// Người nhận chưa có số tài khoản thì giữ nguyên chữ "đang cập nhật" sẵn có.
+// Hộp mừng cưới dùng chung cho mọi thiệp: mã QR, ngân hàng, số tài khoản của chú rể và cô dâu (WEDDING_GIFTS trong config.js).
+// Dùng (sau config.js): <script src="../gift.js" data-accent="#928362" data-bg="#FBF8F2" data-ink="#4A3F33"></script>
+// Nút nào có thuộc tính data-gift-open sẽ mở hộp này. Người của bên mời (?ben=) đứng trước.
 (function () {
   var script = document.currentScript;
+  function attr(name, fallback) { return (script && script.getAttribute('data-' + name)) || fallback; }
   var root = script ? script.src.replace(/[^/]*$/, '') : '../';
   var gifts = window.WEDDING_GIFTS || {};
   var side = window.weddingInvite ? window.weddingInvite().side : 'trai';
+  var accent = attr('accent', '#8a6a3a'), bg = attr('bg', '#fffdf8'), ink = attr('ink', '#2b2621');
+  var font = attr('font', '"Times New Roman", Times, serif');
+  var ui = 'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
+  var dialog;
 
   var css = '' +
-    '[data-gift-account]:empty,[data-gift-holder]:empty{display:none}' +
-    '.gift-qr-link{display:block;width:100%;height:100%;-webkit-tap-highlight-color:transparent}' +
-    '.gift-qr-link img{display:block;width:100%;height:100%;object-fit:contain;border-radius:8px}' +
-    '.gift-has-qr{width:168px!important;height:auto!important;aspect-ratio:640/717;padding:4px!important;border-style:solid!important;background:#fff!important}' +
-    '.gift-copy{margin-left:6px;padding:2px 10px;border:1px solid currentColor;border-radius:999px;background:transparent;color:inherit;' +
-      'font:600 12px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer;vertical-align:middle;white-space:nowrap}' +
-    '.gift-hint{display:block;margin-top:4px;font:13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;opacity:.8}' +
-    '.gift-has-qr + .gift-hint{max-width:190px;margin-left:auto;margin-right:auto;text-align:center}';
+    '.gb{position:fixed;inset:0;margin:auto;width:min(440px,calc(100vw - 40px));height:fit-content;max-height:calc(100dvh - 40px);overflow:auto;' +
+      'box-sizing:border-box;padding:26px 20px 18px;border:1px solid ' + accent + '66;border-radius:18px;background:' + bg + ';color:' + ink + ';' +
+      'box-shadow:0 24px 60px -12px rgba(0,0,0,.45);font:16px/1.45 ' + font + ';text-align:left}' +
+    '.gb[open]{animation:gb-in .35s cubic-bezier(.22,1,.36,1)}' +
+    '.gb::backdrop{background:rgba(0,0,0,.5)}' +
+    '@keyframes gb-in{from{opacity:0;transform:translateY(14px) scale(.97)}}' +
+    '.gb *{box-sizing:border-box}' +
+    '.gb-x{position:absolute;top:8px;right:8px;width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:inherit;opacity:.6;font-size:24px;line-height:1;cursor:pointer}' +
+    '.gb-head{text-align:center;margin:0 18px 6px}' +
+    '.gb-title{margin:0;font:700 22px/1.25 ' + font + ';color:' + accent + ';letter-spacing:.02em;text-transform:none}' +
+    '.gb-sub{margin:6px 0 0;font-size:14.5px;opacity:.75;text-wrap:balance}' +
+    '.gb-item{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;align-items:center;padding:16px 0;border-top:1px solid ' + accent + '33}' +
+    '.gb-item:first-of-type{border-top:0}' +
+    '.gb-qr{display:block;width:112px;aspect-ratio:640/717;padding:5px;border:1px solid ' + accent + '55;border-radius:10px;background:#fff;' +
+      'box-shadow:0 4px 14px -6px rgba(0,0,0,.25);-webkit-tap-highlight-color:transparent}' +
+    '.gb-qr img{display:block;width:100%;height:100%;object-fit:contain;border-radius:6px}' +
+    '.gb-noqr{display:grid;place-items:center;width:112px;aspect-ratio:640/717;border:1px dashed ' + accent + '77;border-radius:10px;font-size:13px;text-align:center;opacity:.7}' +
+    '.gb-who{display:block;font:600 12px/1.4 ' + ui + ';letter-spacing:.14em;text-transform:uppercase;color:' + accent + '}' +
+    '.gb-name{display:block;margin:2px 0 6px;font-size:18px;font-weight:700;line-height:1.3}' +
+    '.gb-bank{display:block;font-size:14.5px;opacity:.8}' +
+    '.gb-acc{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin-top:2px}' +
+    '.gb-num{font-size:18px;letter-spacing:.03em;font-variant-numeric:tabular-nums;white-space:nowrap}' +
+    '.gb-copy{padding:3px 12px;border:1px solid ' + accent + ';border-radius:999px;background:transparent;color:' + accent + ';font:600 12.5px/1.6 ' + ui + ';cursor:pointer;white-space:nowrap}' +
+    '.gb-holder{display:block;margin-top:3px;font:12.5px/1.4 ' + ui + ';letter-spacing:.06em;opacity:.7}' +
+    '.gb-hint{margin:4px 0 0;padding-top:12px;border-top:1px solid ' + accent + '33;font:13px/1.4 ' + ui + ';text-align:center;opacity:.7}' +
+    '.gb-x:focus-visible,.gb-copy:focus-visible,.gb-qr:focus-visible{outline:2px solid ' + accent + ';outline-offset:2px}' +
+    '@media (prefers-reduced-motion: reduce){.gb[open]{animation:none}}';
 
-  function pick(key) {
-    if (key !== 'auto') return gifts[key];
-    var mine = gifts[side], other = gifts[side === 'gai' ? 'trai' : 'gai'];
-    return mine && mine.account ? mine : other && other.account ? other : mine;
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text) e.textContent = text;
+    return e;
   }
 
   function copyText(text) {
@@ -40,73 +60,63 @@
     });
   }
 
-  // Chữ của khung LadiPage nằm trong .ladi-headline
-  function textTarget(el) { return el.querySelector('.ladi-headline') || el; }
-
-  function fill(box, g) {
-    function each(sel, fn) { [].forEach.call(box.querySelectorAll(sel), fn); }
-    each('[data-gift-who]', function (el) { textTarget(el).textContent = g.who; });
-    each('[data-gift-name]', function (el) { textTarget(el).textContent = g.name; });
-    if (!g.account) return;
-    each('[data-gift-bank]', function (el) { textTarget(el).textContent = g.bank; });
-    each('[data-gift-holder]', function (el) { textTarget(el).textContent = g.holder; });
-    var digits = g.account.replace(/\s+/g, '');
-
-    each('[data-gift-account]', function (el) {
-      var target = textTarget(el);
-      target.textContent = g.account;
-      if (el.getAttribute('data-gift-account') === 'tap') {
-        var hint = document.createElement('span'); hint.className = 'gift-hint'; hint.textContent = 'Chạm để sao chép số tài khoản';
-        target.appendChild(hint);
-        el.style.cursor = 'pointer';
-        el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0');
-        el.setAttribute('aria-label', 'Sao chép số tài khoản ' + g.account);
-        var copyTap = function () {
-          copyText(digits).then(function () { hint.textContent = 'Đã sao chép ✓'; }, function () { hint.textContent = 'Số tài khoản: ' + digits; });
-          setTimeout(function () { hint.textContent = 'Chạm để sao chép số tài khoản'; }, 2000);
-        };
-        el.addEventListener('click', copyTap);
-        el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); copyTap(); } });
-        return;
-      }
-      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'gift-copy'; btn.textContent = 'Sao chép';
+  function item(g) {
+    var row = el('div', 'gb-item');
+    if (g.account && g.qr) {
+      var url = root + g.qr;
+      var a = el('a', 'gb-qr'); a.href = url; a.target = '_blank'; a.rel = 'noopener';
+      a.setAttribute('aria-label', 'Mã QR chuyển khoản tới ' + g.holder + ' (mở ảnh để lưu)');
+      var img = el('img'); img.src = url; img.alt = 'Mã QR ' + g.bank + ' ' + g.holder; img.decoding = 'async';
+      a.appendChild(img); row.appendChild(a);
+    } else {
+      row.appendChild(el('div', 'gb-noqr', 'Đang cập nhật'));
+    }
+    var info = el('div', 'gb-info');
+    info.append(el('span', 'gb-who', g.who), el('span', 'gb-name', g.name));
+    if (g.account) {
+      var digits = g.account.replace(/\s+/g, '');
+      var acc = el('div', 'gb-acc');
+      var btn = el('button', 'gb-copy', 'Sao chép'); btn.type = 'button';
       btn.setAttribute('aria-label', 'Sao chép số tài khoản ' + g.account);
       btn.addEventListener('click', function () {
         copyText(digits).then(function () { btn.textContent = 'Đã chép ✓'; }, function () { btn.textContent = 'Chưa chép được'; });
         setTimeout(function () { btn.textContent = 'Sao chép'; }, 2000);
       });
-      target.appendChild(btn);
-    });
-
-    if (!g.qr) return;
-    var url = root + g.qr;
-    var alt = 'Mã QR chuyển khoản ' + g.bank + ' tới ' + g.holder;
-    each('[data-gift-qr]', function (el) {
-      if (el.getAttribute('data-gift-qr') === 'bg') {
-        var bg = el.querySelector('.ladi-image-background') || el;
-        bg.style.setProperty('background-image', 'url("' + url + '")', 'important');
-        bg.style.setProperty('background-size', 'contain', 'important');
-        bg.style.setProperty('background-repeat', 'no-repeat', 'important');
-        bg.style.setProperty('background-position', 'center', 'important');
-        el.style.cursor = 'pointer';
-        el.setAttribute('role', 'link'); el.setAttribute('aria-label', alt + ' (mở ảnh để lưu)');
-        el.addEventListener('click', function () { window.open(url, '_blank', 'noopener'); });
-        return;
-      }
-      el.innerHTML = '';
-      var a = document.createElement('a'); a.className = 'gift-qr-link'; a.href = url; a.target = '_blank'; a.rel = 'noopener';
-      a.setAttribute('aria-label', alt + ' (mở ảnh để lưu)');
-      var img = document.createElement('img'); img.src = url; img.alt = alt; img.loading = 'lazy'; img.decoding = 'async';
-      a.appendChild(img); el.appendChild(a);
-      el.classList.add('gift-has-qr');
-      var hint = document.createElement('span'); hint.className = 'gift-hint'; hint.textContent = 'Chạm mã QR để mở ảnh và lưu lại';
-      el.parentNode.insertBefore(hint, el.nextSibling);
-    });
+      acc.append(el('span', 'gb-num', g.account), btn);
+      info.append(el('span', 'gb-bank', g.bank), acc, el('span', 'gb-holder', g.holder));
+    }
+    row.appendChild(info);
+    return row;
   }
 
-  var style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
-  [].forEach.call(document.querySelectorAll('[data-gift]'), function (box) {
-    var g = pick(box.getAttribute('data-gift'));
-    if (g) fill(box, g);
-  });
+  function build() {
+    var style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
+    dialog = el('dialog', 'gb'); dialog.setAttribute('aria-labelledby', 'gb-title');
+    var close = el('button', 'gb-x', '×'); close.type = 'button'; close.setAttribute('aria-label', 'Đóng');
+    close.addEventListener('click', function () { dialog.close(); });
+    dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
+    var head = el('div', 'gb-head');
+    var title = el('h2', 'gb-title', 'Hộp quà mừng'); title.id = 'gb-title';
+    head.append(title, el('p', 'gb-sub', 'Cảm ơn tình cảm quý khách dành cho chúng tôi'));
+    dialog.append(close, head);
+    var order = side === 'gai' ? ['gai', 'trai'] : ['trai', 'gai'];
+    order.forEach(function (k) { if (gifts[k]) dialog.appendChild(item(gifts[k])); });
+    dialog.appendChild(el('p', 'gb-hint', 'Chạm vào mã QR để mở ảnh và lưu về máy'));
+    document.body.appendChild(dialog);
+  }
+
+  function open() {
+    if (!dialog) build();
+    if (!dialog.open) dialog.showModal();
+    if (document.activeElement && dialog.contains(document.activeElement)) document.activeElement.blur();
+  }
+  window.GiftBox = { open: open };
+
+  // Bắt ở pha capture để nút của mẫu (vd. LadiPage) không mở hộp quà cũ
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-gift-open]');
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    open();
+  }, true);
 })();

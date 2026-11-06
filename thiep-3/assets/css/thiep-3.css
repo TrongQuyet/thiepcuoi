@@ -43,33 +43,7 @@ body.t3-locked { overflow: hidden; }
 .t3-music:focus-visible { outline: 2px solid var(--t3-gold-soft); outline-offset: 3px; }
 @keyframes t3-spin { to { transform: rotate(360deg); } }
 
-/* Hộp thoại chung */
-.t3-sheet {
-  width: min(440px, calc(100vw - 24px)); max-height: 90vh; padding: 0; overflow: auto;
-  position: fixed; inset: 0; margin: auto; /* CSS gốc của mẫu đặt margin:0 cho mọi thẻ nên phải căn giữa lại */
-  border: 1px solid rgba(199, 154, 78, .55); border-radius: 14px;
-  background: var(--t3-bg); color: var(--t3-ink);
-  font-family: Lora, Georgia, serif;
-}
-.t3-sheet::backdrop, .t3-lightbox::backdrop { background: rgba(0, 10, 4, .72); }
-.t3-sheet-head { position: relative; padding: 20px 48px 14px; text-align: center; border-bottom: 1px solid rgba(199, 154, 78, .35); }
-.t3-sheet-head h2 { margin: 0; font: 700 20px "EB Garamond", "Cormorant Garamond", Georgia, serif; letter-spacing: .04em; color: var(--t3-gold-soft); }
-.t3-close {
-  position: absolute; top: 10px; right: 10px; width: 34px; height: 34px;
-  border: 0; border-radius: 50%; background: transparent; color: var(--t3-ink); font-size: 26px; line-height: 1; cursor: pointer;
-}
-.t3-close:hover { background: rgba(229, 228, 208, .1); }
-
-/* Hộp quà */
-.t3-gift { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 18px; }
-.t3-gift .gift-has-qr { width: 100% !important; max-width: 168px; }
-.t3-gift-card { display: grid; justify-items: center; gap: 10px; text-align: center; font-size: 13px; color: var(--t3-muted); }
-.t3-gift-card p { margin: 0; }
-.t3-gift-who { color: var(--t3-gold-soft) !important; font-size: 14px !important; }
-.t3-qr {
-  width: 130px; height: 130px; display: flex; align-items: center; justify-content: center;
-  border: 1px dashed rgba(199, 154, 78, .6); border-radius: 10px; font-size: 13px; line-height: 1.5;
-}
+.t3-lightbox::backdrop { background: rgba(0, 10, 4, .72); }
 
 /* Xem ảnh lớn */
 .t3-lightbox {

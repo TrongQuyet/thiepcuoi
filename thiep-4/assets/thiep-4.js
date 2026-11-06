@@ -179,16 +179,6 @@
     });
   }
 
-  // ---------- Hộp thoại quà mừng ----------
-  function openDialog(d) { if (d.showModal) d.showModal(); else d.setAttribute('open', ''); }
-  function closeDialog(d) { if (d.close) d.close(); else d.removeAttribute('open'); }
-  function setupDialogs() {
-    var gift = $('#gift-dialog');
-    $('#gift-open').addEventListener('click', function () { openDialog(gift); });
-    $('#gift-close').addEventListener('click', function () { closeDialog(gift); });
-    gift.addEventListener('click', function (e) { if (e.target === gift) closeDialog(gift); });
-  }
-
   function send(data) {
     data.card = CARD;
     if (!data.ben) data.ben = inv.side;
@@ -252,7 +242,6 @@
     setInterval(tick, 1000);
     setupMusic();
     setupAlbum();
-    setupDialogs();
     setupWishes();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

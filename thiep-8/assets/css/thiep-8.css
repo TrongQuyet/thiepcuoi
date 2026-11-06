@@ -1,73 +1,4 @@
-/* Thiệp 8: phần tự viết thêm (form xác nhận tham dự, ô khách mời) theo màu của mẫu Song Hỷ đỏ */
-.t8-sheet {
-  padding: 0 !important;
-  max-width: 440px;
-  background-color: rgb(255, 249, 230) !important;
-  color: rgb(47, 0, 0);
-  font-family: "Times New Roman", serif;
-}
-.t8-sheet-head {
-  position: relative;
-  padding: 22px 48px 16px;
-  text-align: center;
-  background-color: rgb(153, 0, 0);
-}
-.t8-sheet-head h2 {
-  margin: 0;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 700;
-  text-transform: uppercase;
-  text-shadow: rgba(0, 0, 0, 0.2) 1px 1px 2px;
-}
-.t8-close {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 26px;
-  line-height: 1;
-  cursor: pointer;
-}
-.t8-close:hover { background: rgba(255, 255, 255, 0.2); }
-.t8-form, .t8-done { padding: 18px 20px 22px; display: grid; gap: 14px; }
-.t8-field { display: grid; gap: 6px; border: 0; margin: 0; padding: 0; min-width: 0; }
-.t8-field > span, .t8-field > legend { font-size: 14px; color: rgb(153, 0, 0); padding: 0; margin-bottom: 2px; }
-.t8-field input[type=text], .t8-field select, .t8-field textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid rgb(153, 0, 0);
-  border-radius: 6px;
-  background: transparent;
-  color: rgb(47, 0, 0);
-  font: 16px/1.4 Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  box-sizing: border-box;
-}
-.t8-field textarea { resize: none; }
-.t8-field input:focus, .t8-field select:focus, .t8-field textarea:focus { outline: 2px solid rgba(153, 0, 0, 0.35); outline-offset: 1px; }
-.t8-choice { display: flex; align-items: center; gap: 8px; font-size: 15px; cursor: pointer; }
-.t8-choice input { accent-color: rgb(153, 0, 0); width: 18px; height: 18px; }
-.t8-submit {
-  justify-self: center;
-  padding: 10px 28px;
-  border: 0;
-  border-radius: 7px;
-  background-color: rgb(153, 0, 0);
-  color: rgb(254, 251, 244);
-  font: 14px "Times New Roman", serif;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-.t8-submit:disabled { opacity: 0.6; cursor: wait; }
-.t8-error { margin: 0; color: #a3322b; font-size: 14px; text-align: center; }
-.t8-done { text-align: center; }
-.t8-done p { margin: 0; }
-.t8-done-title { font-size: 22px; font-family: Carattere, cursive; color: rgb(153, 0, 0); }
+/* Thiệp 8: phần tự viết thêm (ô khách mời, chỉnh chữ) theo màu của mẫu Song Hỷ đỏ */
 /* Nút nhạc khi tạm dừng: dừng hiệu ứng quay và nhảy */
 #music-btn.t8-paused .animate-spin-cd { animation-play-state: paused !important; }
 #wish-list:empty::before {
@@ -102,11 +33,11 @@
 }
 .t8-guest-name {
   margin-top: 2px;
-  font-family: Carattere, cursive;
-  font-size: 40px;
-  line-height: 1.15;
+  font-family: "EB Garamond", "Times New Roman", serif;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.3;
   color: rgb(47, 0, 0);
-  -webkit-text-stroke: .6px rgb(47, 0, 0);
   overflow-wrap: anywhere;
 }
 /* Họ tên đầy đủ dài hơn tên mẫu: thu cỡ chữ cho vừa khung */
@@ -116,5 +47,3 @@ h3[data-w="full1"], h3[data-w="full2"] { font-size: clamp(38px, 11.5vw, 56px) !i
 span:has(> [data-w="t1-label"]), span:has(> [data-w="t2-label"]) { padding-right: 18px; }
 
 /* Hộp quà: tiêu đề chữ trắng trên nền vàng nhạt khó đọc (bản gốc), đổi sang đỏ */
-#gift-dialog h2 { color: rgb(153, 0, 0) !important; text-shadow: none !important; }
-#gift-dialog .btn-circle { color: rgb(153, 0, 0) !important; }
