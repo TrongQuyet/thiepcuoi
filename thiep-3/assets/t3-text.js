@@ -23,7 +23,7 @@
       announce: (inv.side === 'gai' ? 'Trân Trọng Thông Báo Tổ Chức' : 'Trân Trọng Báo Tin') + '<br>' + title(c.name) + ' Của Con Chúng Tôi',
       full1: inv.fullFirst,
       full2: inv.fullSecond,
-      'c-title': title(c.name) + '<br>được cử hành tại',
+      'c-title': title(c.name) + '<br>được cử hành' + (c.place ? ' tại' : ''),
       'c-place': title(c.place),
       'c-time': c.time,
       'c-weekday': c.weekday.toUpperCase(),

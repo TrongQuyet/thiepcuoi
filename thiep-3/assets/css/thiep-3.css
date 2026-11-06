@@ -60,33 +60,9 @@ body.t3-locked { overflow: hidden; }
 }
 .t3-close:hover { background: rgba(229, 228, 208, .1); }
 
-/* Form xác nhận */
-.t3-form, .t3-done { padding: 18px 20px 22px; display: grid; gap: 14px; }
-.t3-field { display: grid; gap: 6px; border: 0; margin: 0; padding: 0; min-width: 0; }
-.t3-field > span, .t3-field > legend { font-size: 14px; color: var(--t3-muted); padding: 0; margin-bottom: 2px; }
-.t3-field input[type=text], .t3-field select, .t3-field textarea {
-  width: 100%; box-sizing: border-box; padding: 10px 12px;
-  border: 1px solid rgba(199, 154, 78, .45); border-radius: 8px;
-  background: rgba(0, 26, 8, .55); color: var(--t3-ink); font: 16px/1.4 Lora, Georgia, serif;
-}
-.t3-field select option { background: var(--t3-bg); }
-.t3-field textarea { resize: none; }
-.t3-field input:focus, .t3-field select:focus, .t3-field textarea:focus { outline: 2px solid rgba(199, 154, 78, .45); outline-offset: 1px; }
-.t3-choice { display: flex; align-items: center; gap: 8px; font-size: 15px; cursor: pointer; }
-.t3-choice input { accent-color: var(--t3-gold); width: 18px; height: 18px; }
-.t3-submit {
-  justify-self: center; padding: 10px 28px; border: 0; border-radius: 999px;
-  background: var(--t3-ink); color: var(--t3-deep);
-  font: 700 14px "Times New Roman", Times, serif; letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
-}
-.t3-submit:disabled { opacity: .6; cursor: wait; }
-.t3-error { margin: 0; color: #f0a39b; font-size: 14px; text-align: center; }
-.t3-done { text-align: center; }
-.t3-done p { margin: 0; }
-.t3-done-title { font: 30px "Alex Brush", cursive; color: var(--t3-gold-soft); }
-
 /* Hộp quà */
-.t3-gift { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 18px; }
+.t3-gift { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 18px; }
+.t3-gift .gift-has-qr { width: 100% !important; max-width: 168px; }
 .t3-gift-card { display: grid; justify-items: center; gap: 10px; text-align: center; font-size: 13px; color: var(--t3-muted); }
 .t3-gift-card p { margin: 0; }
 .t3-gift-who { color: var(--t3-gold-soft) !important; font-size: 14px !important; }
@@ -130,3 +106,11 @@ main [data-w="guest"] { font-size: 38px !important; }
 /* Bỏ màn "Mở thiệp": vào thẳng nội dung */
 #intro { display: none !important; }
 #main { opacity: 1 !important; }
+
+/* Nhà gái không ghi nơi cử hành: ẩn dòng nơi cử hành khi trống */
+[data-w="c-place"]:empty { display: none; }
+
+/* Dòng "Trân Trọng Thông Báo Tổ Chức" (nhà gái) dài: giữ cỡ chữ để mỗi ý nằm trọn một dòng */
+@media (max-width: 767px) {
+  [data-w="announce"] { font-size: min(13px, 3.4vw) !important; width: calc(100% + 32px); margin-inline: -16px; text-wrap: balance; }
+}

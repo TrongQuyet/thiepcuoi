@@ -22,16 +22,6 @@
     $$('[data-w="maps-embed"]').forEach(function (f) {
       f.src = 'https://www.google.com/maps?q=' + encodeURIComponent(p.mapsQuery) + '&output=embed';
     });
-    // Thêm vào lịch Google
-    var start = p.date.replace(/-/g, '') + 'T' + p.time.replace(':', '') + '00';
-    var endH = +p.time.split(':')[0] + 3;
-    var end = p.date.replace(/-/g, '') + 'T' + pad(Math.min(endH, 23)) + p.time.split(':')[1] + '00';
-    var cal = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-      '&text=' + encodeURIComponent('Tiệc cưới ' + inv.first + ' & ' + inv.second) +
-      '&dates=' + start + '/' + end + '&ctz=Asia/Ho_Chi_Minh' +
-      '&location=' + encodeURIComponent(p.venue + ', ' + p.address) +
-      '&details=' + encodeURIComponent('Thiệp mời: ' + location.href);
-    $$('[data-w="cal-link"]').forEach(function (a) { a.href = cal; });
   }
 
   // ---------- Lịch tháng ----------
@@ -154,7 +144,7 @@
     });
   }
 
-  // ---------- Hộp thoại (quà mừng, xác nhận) ----------
+  // ---------- Hộp thoại quà mừng ----------
   function openDialog(d) { if (d.showModal) d.showModal(); else d.setAttribute('open', ''); }
   function closeDialog(d) { if (d.close) d.close(); else d.removeAttribute('open'); }
   function setupDialogs() {
@@ -162,56 +152,12 @@
     $('#gift-open').addEventListener('click', function () { openDialog(gift); });
     $('#gift-close').addEventListener('click', function () { closeDialog(gift); });
     gift.addEventListener('click', function (e) { if (e.target === gift) closeDialog(gift); });
-
-    var rsvp = $('#rsvp-dialog');
-    $('#rsvp-open').addEventListener('click', function () {
-      $('#rsvp-form').hidden = false;
-      $('#rsvp-done').hidden = true;
-      openDialog(rsvp);
-    });
-    $$('[data-close]', rsvp).forEach(function (b) { b.addEventListener('click', function () { closeDialog(rsvp); }); });
-    rsvp.addEventListener('click', function (e) { if (e.target === rsvp) closeDialog(rsvp); });
   }
 
   function send(data) {
     data.card = CARD;
     if (!data.ben) data.ben = inv.side;
     return fetch(API, { method: 'POST', mode: 'no-cors', keepalive: true, body: new URLSearchParams(data) });
-  }
-
-  // ---------- Form xác nhận tham dự ----------
-  function setupRsvp() {
-    var form = $('#rsvp-form'), err = $('#rsvp-error'), submit = $('#rsvp-submit');
-    if (inv.guest) form.elements.name.value = inv.guest;
-    var whose = form.querySelector('[name=whose][value="' + inv.side + '"]');
-    if (whose) whose.checked = true;
-    function guestsVisible() {
-      var a = form.querySelector('[name=attend]:checked');
-      $('#rsvp-guests-field').hidden = !!a && a.value.indexOf('không') >= 0;
-    }
-    $$('[name=attend]', form).forEach(function (r) { r.addEventListener('change', guestsVisible); });
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var name = form.elements.name.value.trim();
-      var attend = form.querySelector('[name=attend]:checked');
-      var fail = !name ? 'Bạn vui lòng điền tên.' : !attend ? 'Bạn vui lòng chọn có tham dự hay không.' : !API ? 'Form xác nhận đang được cài đặt, bạn vui lòng thử lại sau.' : '';
-      err.hidden = !fail;
-      err.textContent = fail;
-      if (fail) { (name ? form.querySelector('[name=attend]') : form.elements.name).focus(); return; }
-      var w = form.querySelector('[name=whose]:checked');
-      // Cảm ơn ngay, gửi lên Sheet chạy ngầm; lỗi thì bỏ qua
-      var message = form.elements.message.value.trim();
-      send({
-        type: 'rsvp', name: name, attend: attend.value,
-        guests: attend.value.indexOf('không') >= 0 ? '' : form.elements.guests.value,
-        message: message, invitee: inv.guest, ben: w ? w.value : inv.side,
-      }).catch(function () {});
-      if (message && window.WishTicker) window.WishTicker.push({ name: name, message: message });
-      form.reset();
-      form.hidden = true;
-      $('#rsvp-done').hidden = false;
-      if (window.RsvpPrompt) window.RsvpPrompt.done();
-    });
   }
 
   // ---------- Sổ lưu bút ----------
@@ -272,7 +218,6 @@
     setupMusic();
     setupAlbum();
     setupDialogs();
-    setupRsvp();
     setupWishes();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

@@ -23,7 +23,7 @@
     'e1-title': 'TIỆC CƯỚI ' + p.venueShort,
     'e1-time': 'VÀO LÚC ' + p.time, 'e1-weekday': up(p.weekday), 'e1-day': pd.d, 'e1-month': 'THÁNG ' + pd.m, 'e1-year': pd.y,
     'e1-lunar': '(Tức ngày ' + p.lunar + ')',
-    'e2-title': up(c.name) + ' ' + cap(c.place),
+    'e2-title': up(c.name) + (c.place ? ' ' + cap(c.place) : ''),
     'e2-time': 'VÀO LÚC ' + c.time, 'e2-weekday': up(c.weekday), 'e2-day': cd.d, 'e2-month': 'THÁNG ' + cd.m, 'e2-year': cd.y,
     'e2-lunar': '(Tức ngày ' + c.lunar + ')',
     'p-time': p.time, 'p-weekday': up(p.weekday), 'p-day': pd.d, 'p-month': 'THÁNG ' + pd.m, 'p-year': pd.y,

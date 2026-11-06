@@ -130,68 +130,6 @@
     return fetch(API, { method: 'POST', mode: 'no-cors', keepalive: true, body: new URLSearchParams(data) });
   }
 
-  // ---------- Xác nhận tham dự ----------
-  function setupRsvp() {
-    var dialog = $('#rsvp-dialog'), form = $('#rsvp-form'), err = $('#rsvp-error'), submit = $('#rsvp-submit');
-    wireDialog(dialog);
-    if (inv.guest) form.elements.name.value = inv.guest;
-    var whose = form.querySelector('[name=whose][value="' + inv.side + '"]');
-    if (whose) whose.checked = true;
-    function guestsVisible() {
-      var a = form.querySelector('[name=attend]:checked');
-      $('#rsvp-guests-field').hidden = !!a && a.value === 'Vắng mặt';
-    }
-    $$('[name=attend]', form).forEach(function (r) { r.addEventListener('change', guestsVisible); });
-    function open(attend) {
-      form.hidden = false;
-      $('#rsvp-done').hidden = true;
-      err.hidden = true;
-      if (attend) form.querySelector('[name=attend][value="' + attend + '"]').checked = true;
-      guestsVisible();
-      openDialog(dialog);
-    }
-    var VALUES = { yes: 'Sẽ đến', maybe: 'Có thể', no: 'Vắng mặt' };
-    $$('#hk2-rsvp [data-attend]').forEach(function (b) {
-      b.addEventListener('click', function () { open(VALUES[b.getAttribute('data-attend')]); });
-    });
-    $('#rsvp-jump').addEventListener('click', function () { open(); });
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var name = form.elements.name.value.trim();
-      var attend = form.querySelector('[name=attend]:checked');
-      var fail = !name ? 'Bạn vui lòng điền tên.' : !attend ? 'Bạn vui lòng chọn có đến hay không.' : !API ? 'Form xác nhận đang được cài đặt, bạn vui lòng thử lại sau.' : '';
-      err.hidden = !fail;
-      err.textContent = fail;
-      if (fail) return;
-      var w = form.querySelector('[name=whose]:checked');
-      // Cảm ơn ngay, gửi lên Sheet chạy ngầm; lỗi thì bỏ qua
-      var message = form.elements.message.value.trim();
-      send({
-        type: 'rsvp', name: name, attend: attend.value,
-        guests: attend.value === 'Vắng mặt' ? '' : form.elements.guests.value,
-        message: message, invitee: inv.guest, ben: w ? w.value : inv.side,
-      }).catch(function () {});
-      if (message && window.WishTicker) window.WishTicker.push({ name: name, message: message });
-      form.reset();
-      form.hidden = true;
-      $('#rsvp-done').hidden = false;
-      if (window.RsvpPrompt) window.RsvpPrompt.done();
-    });
-  }
-
-  // ---------- Thêm vào lịch ----------
-  function setupCalendarButton() {
-    var start = p.date.replace(/-/g, '') + 'T' + p.time.replace(':', '') + '00';
-    var endH = Math.min(+p.time.split(':')[0] + 3, 23);
-    var end = p.date.replace(/-/g, '') + 'T' + pad(endH) + p.time.split(':')[1] + '00';
-    var url = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
-      '&text=' + encodeURIComponent('Tiệc cưới ' + inv.first + ' & ' + inv.second) +
-      '&dates=' + start + '/' + end + '&ctz=Asia/Ho_Chi_Minh' +
-      '&location=' + encodeURIComponent(p.venue + ', ' + p.address) +
-      '&details=' + encodeURIComponent('Thiệp mời: ' + location.href);
-    $('#cal-btn').addEventListener('click', function () { window.open(url, '_blank', 'noopener'); });
-  }
-
   // ---------- Sổ lưu bút ----------
   function wishItem(w) {
     var el = $('#wish-item').firstElementChild.cloneNode(true);
@@ -239,8 +177,6 @@
     setupMusic();
     setupIntro();
     setupAlbum();
-    setupRsvp();
-    setupCalendarButton();
     setupWishes();
     var gift = $('#gift-dialog');
     wireDialog(gift);
