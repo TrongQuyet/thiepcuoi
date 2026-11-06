@@ -1,7 +1,7 @@
-// Hỏi nhanh "có đến không": tự hiện khi khách cuộn tới album ảnh hoặc sau 5 giây trong thiệp.
+// Hỏi nhanh "có đến không": tự hiện khi khách cuộn tới bản đồ Google Map hoặc sau 15 giây trong thiệp.
 // Bấm Có/Không là gửi luôn lên Google Sheet với tên khách trong link (?tenkhach=).
 // Link chung (không có tên) thì hiện ô điền tên và mở bàn phím ngay.
-// Dùng (sau config.js): <script src="../rsvp-prompt.js" data-album="#album-grid" data-accent="#C79A4E"
+// Dùng (sau config.js): <script src="../rsvp-prompt.js" data-target="#map" data-accent="#C79A4E"
 //   data-bg="#10261C" data-ink="#E5E4D0"></script>
 // Thiệp gọi window.RsvpPrompt.done() khi khách đã gửi form xác nhận đầy đủ để không hỏi lại.
 (function () {
@@ -13,7 +13,7 @@
   var font = attr('font', '"Times New Roman", Times, serif');
   // Nhớ theo từng tên khách trong link: mỗi link ?tenkhach= hỏi riêng một lần (link chung là một khách)
   var guestKey = ':' + inv.guest.toLowerCase().replace(/\s+/g, ' ');
-  var DELAY_MS = 5000, DONE_KEY = 'wedding-rsvp-sent' + guestKey, LATER_KEY = 'wedding-rsvp-later' + guestKey;
+  var DELAY_MS = 15000, DONE_KEY = 'wedding-rsvp-sent' + guestKey, LATER_KEY = 'wedding-rsvp-later' + guestKey;
   var card = (location.pathname.match(/thiep-\d+/) || [''])[0];
   var ATTEND = { yes: 'Sẽ đến', no: 'Không đến được' };
   var dialog, choice = null, shown = false, timer = null, observer = null, sending = false;
@@ -179,12 +179,12 @@
   }
 
   timer = setTimeout(show, DELAY_MS);
-  var albumSelector = attr('album', '');
-  var album = albumSelector && document.querySelector(albumSelector);
-  if (album && 'IntersectionObserver' in window) {
+  // Mốc cuộn tới: mặc định là khung bản đồ của thiệp
+  var target = document.querySelector(attr('target', '[data-w="maps-embed"]'));
+  if (target && 'IntersectionObserver' in window) {
     observer = new IntersectionObserver(function (entries) {
       if (entries.some(function (e) { return e.isIntersecting; })) show();
     }, { threshold: 0.2 });
-    observer.observe(album);
+    observer.observe(target);
   }
 })();

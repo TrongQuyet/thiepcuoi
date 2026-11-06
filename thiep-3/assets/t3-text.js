@@ -19,7 +19,8 @@
         'Sự hiện diện của ' + (guest || 'quý khách') + ' sẽ là niềm vinh hạnh lớn lao đối với gia đình chúng tôi. Trân trọng kính mời!',
       'p1-father': inv.parents[0].father, 'p1-mother': inv.parents[0].mother, 'p1-address': inv.parents[0].address,
       'p2-father': inv.parents[1].father, 'p2-mother': inv.parents[1].mother, 'p2-address': inv.parents[1].address,
-      announce: 'Trân Trọng Báo Tin<br>' + title(c.name) + ' Của Con Chúng Tôi',
+      // Theo thiệp in: nhà gái "thông báo tổ chức", nhà trai "báo tin"
+      announce: (inv.side === 'gai' ? 'Trân Trọng Thông Báo Tổ Chức' : 'Trân Trọng Báo Tin') + '<br>' + title(c.name) + ' Của Con Chúng Tôi',
       full1: inv.fullFirst,
       full2: inv.fullSecond,
       'c-title': title(c.name) + '<br>được cử hành tại',

@@ -31,7 +31,7 @@ window.WEDDING_SIDES = {
     fullFirst: 'Nguyễn Trọng Quyết', fullSecond: 'Hà Hoàng Anh',
     parents: [
       { label: 'Nhà trai', father: 'Nguyễn Trọng Đồng', mother: 'Vũ Thị Hiền', address: 'Số 106, Đường Thôn Trung 2, Xã Ô Diên, TP Hà Nội' },
-      { label: 'Nhà gái', father: 'Hà Văn Hùng', mother: 'Phạm Thị Xuyến', address: 'Số 03, Xóm Đoàn Kết, Cụm 3, Xã Ô Diên, TP Hà Nội' },
+      { label: 'Nhà gái', father: 'Hà Văn Hùng', mother: 'Phạm Thị Xuyến', address: 'Số 03, Xóm Đoàn Kết, Cụm 2, Xã Ô Diên, TP Hà Nội' },
     ],
     party: {
       time: '15:30', weekday: 'Thứ Sáu', date: '2026-11-27', lunar: '19 tháng 10 năm Bính Ngọ',
@@ -49,19 +49,19 @@ window.WEDDING_SIDES = {
     first: 'Hoàng Anh', second: 'Trọng Quyết',
     fullFirst: 'Hà Hoàng Anh', fullSecond: 'Nguyễn Trọng Quyết',
     parents: [
-      { label: 'Nhà gái', father: 'Hà Văn Hùng', mother: 'Phạm Thị Xuyến', address: 'Số 03, Xóm Đoàn Kết, Cụm 3, Xã Ô Diên, TP Hà Nội' },
+      { label: 'Nhà gái', father: 'Hà Văn Hùng', mother: 'Phạm Thị Xuyến', address: 'Số 03, Xóm Đoàn Kết, Cụm 2, Xã Ô Diên, TP Hà Nội' },
       { label: 'Nhà trai', father: 'Nguyễn Trọng Đồng', mother: 'Vũ Thị Hiền', address: 'Số 106, Đường Thôn Trung 2, Xã Ô Diên, TP Hà Nội' },
     ],
     party: {
-      time: '09:00', weekday: 'Thứ Sáu', date: '2026-11-27', lunar: '19 tháng 10 năm Bính Ngọ',
+      time: '15:30', weekday: 'Thứ Sáu', date: '2026-11-27', lunar: '19 tháng 10 năm Bính Ngọ',
       venueShort: 'Hồ Quý', venue: 'Hồ Quý, Thôn Đoài', address: 'Xã Ô Diên, TP Hà Nội',
       maps: 'https://www.google.com/maps/search/H%E1%BB%93+Qu%C3%BD+Th%C3%B4n+%C4%90o%C3%A0i+%C3%94+Di%C3%AAn+H%C3%A0+N%E1%BB%99i',
       mapsQuery: 'Hồ Quý Thôn Đoài Ô Diên Hà Nội',
     },
     ceremony: {
       name: 'Lễ vu quy', time: '12:00', weekday: 'Thứ Bảy', date: '2026-11-28', lunar: '20 tháng 10 năm Bính Ngọ', place: 'tư gia nhà gái',
-      address: 'Số 03, Xóm Đoàn Kết, Cụm 3, Xã Ô Diên, TP Hà Nội',
-      maps: 'https://www.google.com/maps/search/X%C3%B3m+%C4%90o%C3%A0n+K%E1%BA%BFt+C%E1%BB%A5m+3+%C3%94+Di%C3%AAn+H%C3%A0+N%E1%BB%99i',
+      address: 'Số 03, Xóm Đoàn Kết, Cụm 2, Xã Ô Diên, TP Hà Nội',
+      maps: 'https://www.google.com/maps/search/X%C3%B3m+%C4%90o%C3%A0n+K%E1%BA%BFt+C%E1%BB%A5m+2+%C3%94+Di%C3%AAn+H%C3%A0+N%E1%BB%99i',
     },
   },
 };
