@@ -5,6 +5,8 @@
   var script = document.currentScript;
   function attr(name, fallback) { return (script && script.getAttribute('data-' + name)) || fallback; }
   var root = script ? script.src.replace(/[^/]*$/, '') : '../';
+  // Ảnh QR theo cùng phiên bản ?v= của gift.js để đổi ảnh là khách thấy ngay
+  var version = (script && script.src.match(/\?v=\d+/) || [''])[0];
   var gifts = window.WEDDING_GIFTS || {};
   var side = window.weddingInvite ? window.weddingInvite().side : 'trai';
   var accent = attr('accent', '#8a6a3a'), bg = attr('bg', '#fffdf8'), ink = attr('ink', '#2b2621');
@@ -63,7 +65,7 @@
   function item(g) {
     var row = el('div', 'gb-item');
     if (g.account && g.qr) {
-      var url = root + g.qr;
+      var url = root + g.qr + version;
       var a = el('a', 'gb-qr'); a.href = url; a.target = '_blank'; a.rel = 'noopener';
       a.setAttribute('aria-label', 'Mã QR chuyển khoản tới ' + g.holder + ' (mở ảnh để lưu)');
       var img = el('img'); img.src = url; img.alt = 'Mã QR ' + g.bank + ' ' + g.holder; img.decoding = 'async';
