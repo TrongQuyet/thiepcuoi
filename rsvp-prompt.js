@@ -1,9 +1,9 @@
 // Form xác nhận tham dự dùng chung cho mọi thiệp (thay cho form riêng của từng mẫu).
-// Tự hiện khi khách cuộn tới bản đồ Google Map hoặc sau 15 giây trong thiệp.
+// Tự hiện khi khách kéo gần hết thiệp (còn khoảng một màn hình nữa là tới cuối).
 // Bấm Có/Không là gửi luôn lên Google Sheet với tên khách trong link (?tenkhach=).
 // Link chung (không có tên) thì hiện ô điền tên và mở bàn phím ngay.
 // Xác nhận xong có ô gửi lời chúc (không bắt buộc).
-// Dùng (sau config.js): <script src="../rsvp-prompt.js" data-target="#map" data-accent="#C79A4E"
+// Dùng (sau config.js): <script src="../rsvp-prompt.js" data-accent="#C79A4E"
 //   data-bg="#10261C" data-ink="#E5E4D0"></script>
 // Nút nào có thuộc tính data-rsvp-open sẽ mở form này bất cứ lúc nào (kể cả khi khách đã đóng hoặc đã trả lời).
 (function () {
@@ -15,7 +15,7 @@
   var font = attr('font', '"Times New Roman", Times, serif');
   // Nhớ theo từng tên khách trong link: mỗi link ?tenkhach= tự hỏi riêng một lần (link chung là một khách)
   var guestKey = ':' + inv.guest.toLowerCase().replace(/\s+/g, ' ');
-  var DELAY_MS = 15000, DONE_KEY = 'wedding-rsvp-sent' + guestKey, LATER_KEY = 'wedding-rsvp-later' + guestKey;
+  var DONE_KEY = 'wedding-rsvp-sent' + guestKey, LATER_KEY = 'wedding-rsvp-later' + guestKey;
   var card = (location.pathname.match(/thiep-\d+/) || [''])[0];
   var ATTEND = { yes: 'Sẽ đến', no: 'Không đến được' };
   var dialog, ui, choice = null, guestName = '', shown = false, timer = null, observer = null;
@@ -213,7 +213,7 @@
     if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('div[data-rsvp-open]')) { e.preventDefault(); open(); }
   });
 
-  // ---------- Tự hỏi ----------
+  // ---------- Tự hỏi khi kéo gần hết thiệp ----------
   if (!API || stored(localStorage, DONE_KEY) || stored(sessionStorage, LATER_KEY)) return;
 
   // Không chen vào lúc khách đang mở hộp thoại khác hoặc còn ở màn mở thiệp
@@ -229,13 +229,14 @@
     open();
   }
 
-  timer = setTimeout(autoShow, DELAY_MS);
-  // Mốc cuộn tới: mặc định là khung bản đồ của thiệp
-  var target = document.querySelector(attr('target', '[data-w="maps-embed"]'));
-  if (target && 'IntersectionObserver' in window) {
+  // Mốc 1px ở cuối trang: lọt vào vùng nhìn (nới thêm 80% chiều cao màn hình) là khách đã kéo gần hết thiệp
+  var end = document.createElement('div');
+  end.setAttribute('aria-hidden', 'true'); end.style.height = '1px';
+  document.body.appendChild(end);
+  if ('IntersectionObserver' in window) {
     observer = new IntersectionObserver(function (entries) {
       if (entries.some(function (e) { return e.isIntersecting; })) autoShow();
-    }, { threshold: 0.2 });
-    observer.observe(target);
+    }, { rootMargin: '0px 0px 80% 0px' });
+    observer.observe(end);
   }
 })();
